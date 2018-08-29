@@ -4,13 +4,17 @@ public class Composer {
 	Composer() {
 		
 	}
-	public String forename() { return foreName; }
-	public String familyname() { return familyName; }
-	public int birthyear() { return birthYear; }
-	public int deathyear() { return deathYear; }
+	Composer(String familiarName, String birthYear, String deathYear) {
+		_familiarName = familiarName;
+		_birthYear = birthYear;
+		_deathYear = deathYear;
+
+	}
+	public String familiarName() { return _familiarName; }
+	public String birthyear() { return _birthYear; }
+	public String deathyear() { return _deathYear; }
 	
-	private String foreName = "Edward";
-	private String familyName = "Elgar";
-	private int birthYear = 1857;
-	private int deathYear = 1934;
+	private String _familiarName = "Edward Elgar";
+	private String _birthYear = "1857";
+	private String _deathYear = "1934";
 }

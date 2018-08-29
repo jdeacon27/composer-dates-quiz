@@ -15,12 +15,7 @@ public class ComposerDatabase {
 			String[] nextRecord;
 			CSVReader reader = new CSVReaderBuilder(new FileReader("composers.csv")).withSkipLines(1).build();
 			while ( (nextRecord = reader.readNext()) != null ) {
-//				for (String cell : nextRecord) {
-//					System.out.print(cell + "\t");
-//				}
-//				System.out.println();
-				allComposers.add(nextRecord);
-//				System.out.println("'" + nextRecord[knownComposerField] + "'");
+				allComposers.add(new Composer(nextRecord[1], nextRecord[2], nextRecord[3]));
 				if ( nextRecord[knownComposerField].length() != 0 ) {
 					knownComposerIndices.add(allComposers.size()-1);	// size is 1 greater than the index of the last element
 				}
@@ -32,26 +27,26 @@ public class ComposerDatabase {
 		}
 	}
 	public void test() {
-		String[] testDatabaseEntry = allComposers.get(0);
-		
-//		System.out.println("Known composer indices List has " + knownComposerIndices.size() + " elements");
-		for ( Integer element : knownComposerIndices ) {
-			System.out.println(allComposers.get(element)[1]);
-		}
-		System.out.println(testDatabaseEntry.length);
-		System.out.println(testDatabaseEntry[1]);
-		System.out.println(testDatabaseEntry[2] + "-" + testDatabaseEntry[3]);
-		System.out.println(testDatabaseEntry[5]);
+//		String[] testDatabaseEntry = allComposers.get(0);
+//		
+////		System.out.println("Known composer indices List has " + knownComposerIndices.size() + " elements");
+//		for ( Integer element : knownComposerIndices ) {
+//			System.out.println(allComposers.get(element)[1]);
+//		}
+//		System.out.println(testDatabaseEntry.length);
+//		System.out.println(testDatabaseEntry[1]);
+//		System.out.println(testDatabaseEntry[2] + "-" + testDatabaseEntry[3]);
+//		System.out.println(testDatabaseEntry[5]);
 	}
 	public Composer randomComposer() {
 		return new Composer();
 	}
 	
-	public String[] randomKnownComposer() {		// should return a composer
+	public Composer randomKnownComposer() {		// should return a composer
 		return allComposers.get(knownComposerIndices.get(rng.nextInt(numberOfKnownComposers)));
 	}
 	
-	private List<String[]> allComposers= new ArrayList<>();		// should have the read of the CSV file construct Composers and store them
+	private List<Composer> allComposers= new ArrayList<>();		// should have the read of the CSV file construct Composers and store them
 	private List<Integer> knownComposerIndices = new ArrayList<>();
 	private int knownComposerField = 5;		// sixth element in the String[] array
 	private int numberOfKnownComposers;

@@ -8,12 +8,12 @@ public class ComposerDatesQuiz {
 //		composerDatabase.test();
 		Scanner sc = new Scanner(System.in);
 		String response;
-		String[] randomKnownComposer;
+		Composer randomKnownComposer;
 		do {
 			randomKnownComposer = composerDatabase.randomKnownComposer();
-			System.out.println(randomKnownComposer[1]);
+			System.out.println(randomKnownComposer.familiarName());
 			response = sc.next();
-			System.out.println(randomKnownComposer[2] + "-" + randomKnownComposer[3] + "\n");
+			System.out.println(randomKnownComposer.birthyear() + "-" + randomKnownComposer.deathyear() + "\n");
 		} while ( !response.equalsIgnoreCase("stop") );
 	}
 }
