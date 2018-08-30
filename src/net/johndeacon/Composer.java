@@ -2,7 +2,7 @@ package net.johndeacon;
 
 public class Composer {
 	Composer() {
-		
+		// default constructor makes no sense; this was just for testing
 	}
 	Composer(String familiarName, String birthYear, String deathYear) {
 		_familiarName = familiarName;

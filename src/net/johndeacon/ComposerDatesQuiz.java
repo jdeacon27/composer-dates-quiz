@@ -15,5 +15,6 @@ public class ComposerDatesQuiz {
 			response = sc.next();
 			System.out.println(randomKnownComposer.birthyear() + "-" + randomKnownComposer.deathyear() + "\n");
 		} while ( !response.equalsIgnoreCase("stop") );
+		sc.close();
 	}
 }
