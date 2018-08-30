@@ -10,12 +10,12 @@ public class ComposerDatesQuiz {
 //		sessionChooser.test();
 		Scanner sc = new Scanner(System.in);
 		String response;
-		Composer randomKnownComposer;
+		Composer shuffedKnownComposer;
 		do {
-			randomKnownComposer = sessionChooser.randomKnownComposer();
-			System.out.println(randomKnownComposer.familiarName());
+			shuffedKnownComposer = sessionChooser.nextShuffledKnownComposer();
+			System.out.println(shuffedKnownComposer.familiarName());
 			response = sc.next();
-			System.out.println(randomKnownComposer.birthyear() + "-" + randomKnownComposer.deathyear() + "\n");
+			System.out.println(shuffedKnownComposer.birthyear() + "-" + shuffedKnownComposer.deathyear() + "\n");
 		} while ( !response.equalsIgnoreCase("stop") );
 		sc.close();
 	}

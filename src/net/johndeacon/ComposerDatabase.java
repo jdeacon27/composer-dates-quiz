@@ -4,13 +4,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
 public class ComposerDatabase {
-	public ComposerDatabase() {
+	protected ComposerDatabase() {
 		try {
 			String[] nextRecord;
 			CSVReader reader = new CSVReaderBuilder(new FileReader("composers.csv")).withSkipLines(1).build();
@@ -26,9 +25,10 @@ public class ComposerDatabase {
 			System.out.println("File not found");
 		}
 	}
-	public int totalEntries() { return allComposers.size(); }
-	public int totalKnownEntries() { return knownComposerIndices.size(); }
-	public Composer knownComposer(int index) {
+	
+	protected int totalEntries() { return allComposers.size(); }
+	protected int totalKnownEntries() { return knownComposerIndices.size(); }
+	protected Composer knownComposer(int index) {
 		return allComposers.get(knownComposerIndices.get(index));
 	}
 
