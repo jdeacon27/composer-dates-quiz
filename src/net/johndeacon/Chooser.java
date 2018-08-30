@@ -24,14 +24,11 @@ public class Chooser {
 		
 		System.out.println("Size of pack " + shuffledIndices.size());
 		for ( int index = 0; index < shuffledIndices.size(); index++ ) {
-			System.out.print(shuffledIndices.get(index) + ", "); 
 		}
-		System.out.println();
 		
 		int shuffledIndicesIndex;
 		int composerIndex;
 		shuffledIndicesIndex = rng.nextInt(shuffledIndices.size());
-		System.out.println("shuffledIndicesIndex = " + shuffledIndicesIndex);
 		composerIndex = shuffledIndices.get(shuffledIndicesIndex);
 		shuffledIndices.remove(shuffledIndicesIndex);
 		return _database.knownComposer(composerIndex);
