@@ -26,35 +26,20 @@ public class ComposerDatabase {
 			System.out.println("File not found");
 		}
 	}
-	public void test() {
-//		String[] testDatabaseEntry = allComposers.get(0);
-//		
-////		System.out.println("Known composer indices List has " + knownComposerIndices.size() + " elements");
-//		for ( Integer element : knownComposerIndices ) {
-//			System.out.println(allComposers.get(element)[1]);
-//		}
-//		System.out.println(testDatabaseEntry.length);
-//		System.out.println(testDatabaseEntry[1]);
-//		System.out.println(testDatabaseEntry[2] + "-" + testDatabaseEntry[3]);
-//		System.out.println(testDatabaseEntry[5]);
+	public int totalEntries() { return allComposers.size(); }
+	public int totalKnownEntries() { return knownComposerIndices.size(); }
+	public Composer knownComposer(int index) {
+		return allComposers.get(knownComposerIndices.get(index));
 	}
-	public Composer randomComposer() {
-		return new Composer();
-	}
-	
-	public Composer randomKnownComposer() {		// should return a composer
-		return allComposers.get(knownComposerIndices.get(rng.nextInt(numberOfKnownComposers)));
-	}
-	
-	private List<Composer> allComposers= new ArrayList<>();		// should have the read of the CSV file construct Composers and store them
+
+	private List<Composer> allComposers= new ArrayList<>();
 	private List<Integer> knownComposerIndices = new ArrayList<>();
 	// Current layout of CSV file follows
 	private int familyNameFirstField = 0;
 	private int foreNameFirstField = 1;
 	private int birthYearField = 2;
 	private int deathYearField = 3;
-	private int ageField = 4;	// Currently, in the database file this is just a subtraction so can be a year out
-	private int knownComposerField = 5;		// sixth element in the String[] array
+	private int ageField = 4;			// Currently, in the database file this is just a subtraction so can be a year out
+	private int knownComposerField = 5;
 	private int numberOfKnownComposers;
-	private Random rng = new Random();
 }
