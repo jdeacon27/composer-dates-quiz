@@ -1,5 +1,6 @@
 package net.johndeacon;
 
+import java.awt.Font;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -7,11 +8,18 @@ public class ComposerDatesQuiz {
 	public static void main(String[] args) {
 		JFrame frame=new JFrame();  
         
-	    JLabel composerNamePrompt = new JLabel();
-	    composerNamePrompt.setBounds(50, 50, 300, 30);		//x axis, y axis, width, height
+	    // JLabel composerNamePrompt = new JLabel();		// Several of these are becoming class variables
+		composerNamePrompt.setBounds(50, 50, 300, 30);		// x axis, y axis, width, height
 	    frame.add(composerNamePrompt);
+	    Font font = composerNamePrompt.getFont();
+	    Font infoFont = font.deriveFont(Font.PLAIN);
+	    
+	    JLabel userGuidance = new JLabel("Use the Tab and Space keys to move and \"click\"");
+	    userGuidance.setBounds(50, 10, 300, 30);
+	    userGuidance.setFont(infoFont);
+	    frame.add(userGuidance);
 
-	    JTextField birthAnswerField = new JTextField();
+	    // JTextField birthAnswerField = new JTextField();
 	    birthAnswerField.setBounds(50, 100, 80, 30);
 	    frame.add(birthAnswerField);
 
@@ -24,10 +32,10 @@ public class ComposerDatesQuiz {
 	    frame.add(deathAnswerField);
 
 	    JLabel resultField = new JLabel();
-	    resultField.setBounds(130, 150, 300, 30);
+	    resultField.setBounds(50, 150, 300, 30);
 	    frame.add(resultField);
 
-	    JButton submitButton = new JButton("Go");
+	    // JButton submitButton = new JButton("Respond");
 	    submitButton.setBounds(110, 200, 100, 40);
 	    submitButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
@@ -38,20 +46,19 @@ public class ComposerDatesQuiz {
 	    		} else {
 	    			resultField.setText(birthyear + " - " + deathyear);
 	    		}
+	    		nextButton.requestFocusInWindow();
 	    	}
 	    });  		          
 		frame.add(submitButton);
 		
-	    JButton nextButton = new JButton("Next");
+	    // JButton nextButton = new JButton("Next");
 	    nextButton.setBounds(110, 300, 100, 40);
 	    nextButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		birthAnswerField.setText("");
 	    		deathAnswerField.setText("");
-				shuffledKnownComposer = sessionChooser.nextShuffledKnownComposer();
-				composerNamePrompt.setText(shuffledKnownComposer.familiarName());
-				birthyear = shuffledKnownComposer.birthyear();
-				deathyear = shuffledKnownComposer.deathyear();
+	    		poseQuestion();
+	    		birthAnswerField.requestFocusInWindow();
 	    	}
 	    });
 		frame.add(nextButton);
@@ -66,10 +73,18 @@ public class ComposerDatesQuiz {
 		frame.add(stopButton);
 
 		
-		frame.setSize(400,500);		// width, height  
-		frame.setLayout(null);		//using no layout managers  
-		frame.setVisible(true);  
+		frame.setSize(400,500);		// width, height
+		frame.setLayout(null);		//using no layout managers
+        frame.setLocationByPlatform(true);
+		frame.setVisible(true);
+		poseQuestion();
 		
+	}
+	protected static void poseQuestion() {
+		shuffledKnownComposer = sessionChooser.nextShuffledKnownComposer();
+		composerNamePrompt.setText(shuffledKnownComposer.familiarName());
+		birthyear = shuffledKnownComposer.birthyear();
+		deathyear = shuffledKnownComposer.deathyear();
 	}
 	
 	private static ComposerDatabase composerDatabase = new ComposerDatabase();
@@ -77,5 +92,9 @@ public class ComposerDatesQuiz {
 	private static Composer shuffledKnownComposer;
 	private static String birthyear;
 	private static String deathyear;
-
+	
+    private static JLabel composerNamePrompt = new JLabel();
+    private static JTextField birthAnswerField = new JTextField();
+    private static JButton submitButton = new JButton("Respond");
+    private static JButton nextButton = new JButton("Next");
 }

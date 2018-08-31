@@ -22,7 +22,7 @@ public class Chooser {
 			}
 		}
 		
-		System.out.println("Size of pack " + shuffledIndices.size());
+//		System.out.println("Size of pack " + shuffledIndices.size());
 		for ( int index = 0; index < shuffledIndices.size(); index++ ) {
 		}
 		
