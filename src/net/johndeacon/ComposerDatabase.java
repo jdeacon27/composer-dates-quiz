@@ -31,7 +31,10 @@ public class ComposerDatabase {
 	protected Composer knownComposer(int index) {
 		return allComposers.get(knownComposerIndices.get(index));
 	}
-
+	protected Composer anyComposer(int index) {
+		return allComposers.get(index);
+	}
+	
 	private List<Composer> allComposers= new ArrayList<>();
 	private List<Integer> knownComposerIndices = new ArrayList<>();
 	// Current layout of CSV file follows

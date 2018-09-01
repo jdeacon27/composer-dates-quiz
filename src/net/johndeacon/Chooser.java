@@ -12,26 +12,26 @@ public class Chooser {
 	}
 	
 	protected  Composer randomKnownComposer() {
+		// Not much point in keeping this. I can't see ever wanting a random choice as opposed to a shuffled
 		int randomComposerIndex = rng.nextInt(_totalKnownEntries);
 		return _database.knownComposer(randomComposerIndex);
 	}
 	protected Composer nextShuffledKnownComposer() {
-		if ( shuffledIndices.size() == 0 ) {
+		if ( shuffledKnownIndices.size() == 0 ) {
 			for ( int index = 0; index < _totalKnownEntries; index++ ) {
-				shuffledIndices.add(index); 
+				shuffledKnownIndices.add(index); 
 			}
 		}
-		
-//		System.out.println("Size of pack " + shuffledIndices.size());
-		for ( int index = 0; index < shuffledIndices.size(); index++ ) {
-		}
-		
 		int shuffledIndicesIndex;
 		int composerIndex;
-		shuffledIndicesIndex = rng.nextInt(shuffledIndices.size());
-		composerIndex = shuffledIndices.get(shuffledIndicesIndex);
-		shuffledIndices.remove(shuffledIndicesIndex);
+		shuffledIndicesIndex = rng.nextInt(shuffledKnownIndices.size());
+		composerIndex = shuffledKnownIndices.get(shuffledIndicesIndex);
+		shuffledKnownIndices.remove(shuffledIndicesIndex);
 		return _database.knownComposer(composerIndex);
+	}
+	public Composer nextShuffledComposer() {
+		System.out.println("Choosing from all composers");
+		return _database.anyComposer(12);
 	}
 	protected void test() {
 		System.out.println("Total entries " + _totalEntries);
@@ -39,7 +39,7 @@ public class Chooser {
 	}
 	
 	private ComposerDatabase _database;
-	private List<Integer> shuffledIndices = new LinkedList<>();
+	private List<Integer> shuffledKnownIndices = new LinkedList<>();
 	private int _totalEntries;
 	private int _totalKnownEntries;
 	private Random rng = new Random();

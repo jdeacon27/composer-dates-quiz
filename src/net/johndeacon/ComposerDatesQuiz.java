@@ -36,7 +36,7 @@ public class ComposerDatesQuiz {
 	    frame.add(resultField);
 
 	    // JButton submitButton = new JButton("Respond");
-	    submitButton.setBounds(110, 200, 100, 40);
+	    submitButton.setBounds(50, 200, 100, 40);
 	    submitButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String birthAnswer = birthAnswerField.getText();
@@ -52,7 +52,7 @@ public class ComposerDatesQuiz {
 		frame.add(submitButton);
 		
 	    // JButton nextButton = new JButton("Next");
-	    nextButton.setBounds(110, 300, 100, 40);
+	    nextButton.setBounds(50, 300, 100, 40);
 	    nextButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		birthAnswerField.setText("");
@@ -64,14 +64,24 @@ public class ComposerDatesQuiz {
 		frame.add(nextButton);
 		
 	    JButton stopButton = new JButton("Stop");
-	    stopButton.setBounds(110, 400, 100, 40);
+	    stopButton.setBounds(50, 400, 100, 40);
 	    stopButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		frame.dispose();
 	    	}
 	    });
 		frame.add(stopButton);
-
+		
+		// JRadioButton knownComposers = new JRadioButton("Known Composers");
+		knownComposers.setBounds(170, 290, 130, 30);
+		// JRadioButton allComposers = new JRadioButton("All Composers");
+		allComposers.setBounds(170, 320, 130, 30);
+		ButtonGroup akGroup = new ButtonGroup();
+		akGroup.add(allComposers);
+		akGroup.add(knownComposers);
+		knownComposers.setSelected(true);
+		frame.add(knownComposers);
+		frame.add(allComposers);
 		
 		frame.setSize(400,500);		// width, height
 		frame.setLayout(null);		//using no layout managers
@@ -80,21 +90,29 @@ public class ComposerDatesQuiz {
 		poseQuestion();
 		
 	}
+
 	protected static void poseQuestion() {
-		shuffledKnownComposer = sessionChooser.nextShuffledKnownComposer();
-		composerNamePrompt.setText(shuffledKnownComposer.familiarName());
-		birthyear = shuffledKnownComposer.birthyear();
-		deathyear = shuffledKnownComposer.deathyear();
+		if ( quizzingKnownComposers ) {
+			currentComposer = sessionChooser.nextShuffledKnownComposer();
+		} else {
+			currentComposer = sessionChooser.nextShuffledComposer();
+		}
+		composerNamePrompt.setText(currentComposer.familiarName());
+		birthyear = currentComposer.birthyear();
+		deathyear = currentComposer.deathyear();
 	}
 	
 	private static ComposerDatabase composerDatabase = new ComposerDatabase();
 	private static Chooser sessionChooser = new Chooser(composerDatabase);
-	private static Composer shuffledKnownComposer;
+	private static Composer currentComposer;
 	private static String birthyear;
 	private static String deathyear;
+	private static boolean quizzingKnownComposers = false;
 	
     private static JLabel composerNamePrompt = new JLabel();
     private static JTextField birthAnswerField = new JTextField();
     private static JButton submitButton = new JButton("Respond");
     private static JButton nextButton = new JButton("Next");
+	private static JRadioButton knownComposers = new JRadioButton("Known Composers");
+	private static JRadioButton allComposers = new JRadioButton("All Composers");
 }
