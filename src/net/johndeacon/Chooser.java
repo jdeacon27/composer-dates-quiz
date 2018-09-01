@@ -30,8 +30,18 @@ public class Chooser {
 		return _database.knownComposer(composerIndex);
 	}
 	public Composer nextShuffledComposer() {
-		System.out.println("Choosing from all composers");
-		return _database.anyComposer(12);
+		if ( shuffledIndices.size() == 0 ) {
+			for ( int index = 0; index < _totalEntries; index++ ) {
+				shuffledIndices.add(index); 
+			}
+			System.out.println("Pack size " + shuffledIndices.size());
+		}
+		int shuffledIndicesIndex;
+		int composerIndex;
+		shuffledIndicesIndex = rng.nextInt(shuffledIndices.size());
+		composerIndex = shuffledIndices.get(shuffledIndicesIndex);
+		shuffledIndices.remove(shuffledIndicesIndex);
+		return _database.anyComposer(composerIndex);
 	}
 	protected void test() {
 		System.out.println("Total entries " + _totalEntries);
@@ -39,6 +49,7 @@ public class Chooser {
 	}
 	
 	private ComposerDatabase _database;
+	private List<Integer> shuffledIndices = new LinkedList<>();
 	private List<Integer> shuffledKnownIndices = new LinkedList<>();
 	private int _totalEntries;
 	private int _totalKnownEntries;
