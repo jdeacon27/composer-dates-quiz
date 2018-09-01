@@ -34,7 +34,6 @@ public class Chooser {
 			for ( int index = 0; index < _totalEntries; index++ ) {
 				shuffledIndices.add(index); 
 			}
-			System.out.println("Pack size " + shuffledIndices.size());
 		}
 		int shuffledIndicesIndex;
 		int composerIndex;

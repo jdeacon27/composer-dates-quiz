@@ -4,36 +4,36 @@ import java.awt.Font;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class ComposerDatesQuiz {
-	public static void main(String[] args) {
-		JFrame frame=new JFrame();  
+public class ComposerDatesQuiz extends JFrame {
+	public ComposerDatesQuiz() {
+		super();
         
 	    // JLabel composerNamePrompt = new JLabel();		// Several of these are becoming class variables
 		composerNamePrompt.setBounds(50, 50, 300, 30);		// x axis, y axis, width, height
-	    frame.add(composerNamePrompt);
+	    this.add(composerNamePrompt);
 	    Font font = composerNamePrompt.getFont();
 	    Font infoFont = font.deriveFont(Font.PLAIN);
 	    
 	    JLabel userGuidance = new JLabel("Use the Tab and Space keys to move and \"click\"");
 	    userGuidance.setBounds(50, 10, 300, 30);
 	    userGuidance.setFont(infoFont);
-	    frame.add(userGuidance);
+	    this.add(userGuidance);
 
 	    // JTextField birthAnswerField = new JTextField();
 	    birthAnswerField.setBounds(50, 100, 80, 30);
-	    frame.add(birthAnswerField);
+	    this.add(birthAnswerField);
 
 	    JLabel datesHyphen = new JLabel("-");
 	    datesHyphen.setBounds(150, 100, 20, 30);
-	    frame.add(datesHyphen);
+	    this.add(datesHyphen);
 
 	    JTextField deathAnswerField = new JTextField();
 	    deathAnswerField.setBounds(180, 100, 80, 30);
-	    frame.add(deathAnswerField);
+	    this.add(deathAnswerField);
 
 	    JLabel resultField = new JLabel();
 	    resultField.setBounds(50, 150, 300, 30);
-	    frame.add(resultField);
+	    this.add(resultField);
 
 	    // JButton submitButton = new JButton("Respond");
 	    submitButton.setBounds(50, 200, 100, 40);
@@ -49,7 +49,7 @@ public class ComposerDatesQuiz {
 	    		nextButton.requestFocusInWindow();
 	    	}
 	    });  		          
-		frame.add(submitButton);
+		this.add(submitButton);
 		
 	    // JButton nextButton = new JButton("Next");
 	    nextButton.setBounds(50, 300, 100, 40);
@@ -61,16 +61,16 @@ public class ComposerDatesQuiz {
 	    		birthAnswerField.requestFocusInWindow();
 	    	}
 	    });
-		frame.add(nextButton);
+		this.add(nextButton);
 		
 	    JButton stopButton = new JButton("Stop");
 	    stopButton.setBounds(50, 400, 100, 40);
 	    stopButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		frame.dispose();
+	    		ComposerDatesQuiz.this.dispose();
 	    	}
 	    });
-		frame.add(stopButton);
+		this.add(stopButton);
 		
 		// JRadioButton knownComposers = new JRadioButton("Known Composers");
 		knownComposers.setBounds(170, 290, 130, 30);
@@ -80,14 +80,17 @@ public class ComposerDatesQuiz {
 		akGroup.add(allComposers);
 		akGroup.add(knownComposers);
 		knownComposers.setSelected(true);
-		frame.add(knownComposers);
-		frame.add(allComposers);
+		this.add(knownComposers);
+		this.add(allComposers);
 		
-		frame.setSize(400,500);		// width, height
-		frame.setLayout(null);		//using no layout managers
-        frame.setLocationByPlatform(true);
-		frame.setVisible(true);
-		poseQuestion();
+		this.setSize(400,500);		// width, height
+		this.setLayout(null);		//using no layout managers
+        this.setLocationByPlatform(true);
+	}
+    	public static void main(String[] args) {
+    		ComposerDatesQuiz quiz = new ComposerDatesQuiz();
+    		quiz.setVisible(true);
+    		quiz.poseQuestion();
 		
 	}
 
