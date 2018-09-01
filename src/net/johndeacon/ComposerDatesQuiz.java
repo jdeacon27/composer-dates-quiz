@@ -1,14 +1,21 @@
 package net.johndeacon;
 
 import java.awt.Font;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.ButtonGroup;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+// import javax.swing.SwingUtilities;	// In case I wanted to set the TAB order?	
 
 public class ComposerDatesQuiz extends JFrame {
+	private static final long serialVersionUID = 6312869237473479611L;
 	public ComposerDatesQuiz() {
-		super();
+		super("Composer Dates Quiz");
         
-	    // JLabel composerNamePrompt = new JLabel();		// Several of these are becoming class variables
 		composerNamePrompt.setBounds(50, 50, 300, 30);		// x axis, y axis, width, height
 	    this.add(composerNamePrompt);
 	    Font font = composerNamePrompt.getFont();
@@ -19,7 +26,6 @@ public class ComposerDatesQuiz extends JFrame {
 	    userGuidance.setFont(infoFont);
 	    this.add(userGuidance);
 
-	    // JTextField birthAnswerField = new JTextField();
 	    birthAnswerField.setBounds(50, 100, 80, 30);
 	    this.add(birthAnswerField);
 
@@ -27,7 +33,7 @@ public class ComposerDatesQuiz extends JFrame {
 	    datesHyphen.setBounds(150, 100, 20, 30);
 	    this.add(datesHyphen);
 
-	    JTextField deathAnswerField = new JTextField();
+	    // JTextField deathAnswerField = new JTextField();
 	    deathAnswerField.setBounds(180, 100, 80, 30);
 	    this.add(deathAnswerField);
 
@@ -35,14 +41,13 @@ public class ComposerDatesQuiz extends JFrame {
 	    resultField.setBounds(50, 150, 300, 30);
 	    this.add(resultField);
 
-	    // JButton submitButton = new JButton("Respond");
 	    submitButton.setBounds(50, 200, 100, 40);
 	    submitButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String birthAnswer = birthAnswerField.getText();
 	    		String deathAnswer = deathAnswerField.getText();
 	    		if ( birthAnswer.equals(birthyear) && deathAnswer.equals(deathyear) ) {
-	    			resultField.setText(" Correct");
+	    			resultField.setText("Correct");
 	    		} else {
 	    			resultField.setText(birthyear + " - " + deathyear);
 	    		}
@@ -51,12 +56,12 @@ public class ComposerDatesQuiz extends JFrame {
 	    });  		          
 		this.add(submitButton);
 		
-	    // JButton nextButton = new JButton("Next");
 	    nextButton.setBounds(50, 300, 100, 40);
 	    nextButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		birthAnswerField.setText("");
 	    		deathAnswerField.setText("");
+	    		resultField.setText("");
 	    		poseQuestion();
 	    		birthAnswerField.requestFocusInWindow();
 	    	}
@@ -72,29 +77,43 @@ public class ComposerDatesQuiz extends JFrame {
 	    });
 		this.add(stopButton);
 		
-		// JRadioButton knownComposers = new JRadioButton("Known Composers");
 		knownComposers.setBounds(170, 290, 130, 30);
-		// JRadioButton allComposers = new JRadioButton("All Composers");
 		allComposers.setBounds(170, 320, 130, 30);
 		ButtonGroup akGroup = new ButtonGroup();
 		akGroup.add(allComposers);
 		akGroup.add(knownComposers);
-		knownComposers.setSelected(true);
+		knownComposers.setSelected(true); quizzingKnownComposers = true;
+		RadioButtonActionListener rbActionListener = new RadioButtonActionListener();
+		knownComposers.addActionListener(rbActionListener);
+		allComposers.addActionListener(rbActionListener);
 		this.add(knownComposers);
 		this.add(allComposers);
 		
 		this.setSize(400,500);		// width, height
 		this.setLayout(null);		//using no layout managers
         this.setLocationByPlatform(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-    	public static void main(String[] args) {
-    		ComposerDatesQuiz quiz = new ComposerDatesQuiz();
-    		quiz.setVisible(true);
-    		quiz.poseQuestion();
-		
+	class RadioButtonActionListener implements ActionListener {
+	    @Override
+	    public void actionPerformed(ActionEvent event) {
+	        JRadioButton button = (JRadioButton) event.getSource();
+	 	    if (button == allComposers) {
+	 	        quizzingKnownComposers = false;
+	        } else if (button == knownComposers) {
+ 	        	quizzingKnownComposers = true;
+	        }
+	 	    return;
+	    }
 	}
 
-	protected static void poseQuestion() {
+	public static void main(String[] args) {
+		ComposerDatesQuiz quiz = new ComposerDatesQuiz();
+		quiz.setVisible(true);
+		quiz.poseQuestion();
+	}
+
+	protected void poseQuestion() {
 		if ( quizzingKnownComposers ) {
 			currentComposer = sessionChooser.nextShuffledKnownComposer();
 		} else {
@@ -103,19 +122,22 @@ public class ComposerDatesQuiz extends JFrame {
 		composerNamePrompt.setText(currentComposer.familiarName());
 		birthyear = currentComposer.birthyear();
 		deathyear = currentComposer.deathyear();
+		return;
 	}
 	
-	private static ComposerDatabase composerDatabase = new ComposerDatabase();
-	private static Chooser sessionChooser = new Chooser(composerDatabase);
-	private static Composer currentComposer;
-	private static String birthyear;
-	private static String deathyear;
-	private static boolean quizzingKnownComposers = false;
+	// Shouldn't all or most of these become instance variables?
+	private ComposerDatabase composerDatabase = new ComposerDatabase();
+	private Chooser sessionChooser = new Chooser(composerDatabase);
+	private Composer currentComposer;
+	private String birthyear;
+	private String deathyear;
+	private boolean quizzingKnownComposers;
 	
-    private static JLabel composerNamePrompt = new JLabel();
-    private static JTextField birthAnswerField = new JTextField();
-    private static JButton submitButton = new JButton("Respond");
-    private static JButton nextButton = new JButton("Next");
-	private static JRadioButton knownComposers = new JRadioButton("Known Composers");
-	private static JRadioButton allComposers = new JRadioButton("All Composers");
+    private JLabel composerNamePrompt = new JLabel();
+    private JTextField birthAnswerField = new JTextField();
+    private JTextField deathAnswerField = new JTextField();
+    private JButton submitButton = new JButton("Respond");
+    private JButton nextButton = new JButton("Next");
+	private JRadioButton knownComposers = new JRadioButton("Known Composers");
+	private JRadioButton allComposers = new JRadioButton("All Composers");
 }
