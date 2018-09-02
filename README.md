@@ -5,8 +5,11 @@ This is a private project (although I am not trying to _forbid_ anyone from cont
 I was an Eclipse user long ago. I wanted to get up-to-date with using Eclipse (Java) with Maven and git.
 So this is a little play project.
 
-It will read a database of composer names and dates and quizzes the user. It's at v0.1, the first
-working version.
+It will read a database of composer names and dates and then quizz the user for the composer's dates.
+It's reached the point where it's runnable working from an unsophisticated GUI. If you get both
+the birth and death dates correct, you'll be told so. If you omit either or both dates, or
+get any dates wrong, you will be shown the correct dates. Use the Tab and Enter keys or the
+mouse.
 
 It is moderately object oriented.
 
