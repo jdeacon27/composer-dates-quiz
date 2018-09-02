@@ -3,7 +3,6 @@ package net.johndeacon;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -21,14 +20,7 @@ public class ComposerDatesQuiz extends JFrame {
         
 		/*JLabel*/ composerNamePrompt.setBounds(50, 50, 300, 30);		// x axis, y axis, width, height
 	    this.add(composerNamePrompt);
-	    Font font = composerNamePrompt.getFont();
-	    Font infoFont = font.deriveFont(Font.PLAIN);
 	    
-	    JLabel userGuidance = new JLabel("Use the Tab and Space keys to move and \"click\"");
-	    userGuidance.setBounds(50, 10, 300, 30);
-	    userGuidance.setFont(infoFont);
-	    this.add(userGuidance);
-
 	    /*JTextField*/ birthAnswerField.setBounds(50, 100, 80, 30);
 	    this.add(birthAnswerField);
 
@@ -54,6 +46,7 @@ public class ComposerDatesQuiz extends JFrame {
 	    			resultField.setText(birthyear + " - " + deathyear);
 	    		}
 	    		nextButton.requestFocusInWindow();
+	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(nextButton);
 	    	}
 	    });  		          
 		this.add(submitButton);
@@ -66,6 +59,7 @@ public class ComposerDatesQuiz extends JFrame {
 	    		resultField.setText("");
 	    		poseQuestion();
 	    		birthAnswerField.requestFocusInWindow();
+	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(submitButton);
 	    	}
 	    });
 		this.add(nextButton);
@@ -84,6 +78,7 @@ public class ComposerDatesQuiz extends JFrame {
 		
 		this.setSize(400,500);		// width, height
 		this.setLayout(null);		//using no layout managers
+		this.getRootPane().setDefaultButton(submitButton);
         this.setLocationByPlatform(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Vector<Component> order = new Vector<Component>(4);
