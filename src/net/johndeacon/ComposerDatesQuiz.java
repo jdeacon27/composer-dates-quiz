@@ -1,15 +1,19 @@
 package net.johndeacon;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.FocusTraversalPolicy;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
-// import javax.swing.SwingUtilities;	// In case I wanted to set the TAB order?	
 
 public class ComposerDatesQuiz extends JFrame {
 	public ComposerDatesQuiz() {
@@ -82,6 +86,12 @@ public class ComposerDatesQuiz extends JFrame {
 		this.setLayout(null);		//using no layout managers
         this.setLocationByPlatform(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Vector<Component> order = new Vector<Component>(4);
+        order.add(birthAnswerField);
+        order.add(deathAnswerField);
+        order.add(submitButton);
+        order.add(nextButton);
+        this.setFocusTraversalPolicy(new QuizFocusTraversalPolicy(order));
 	}
 
 	class RadioButtonActionListener implements ActionListener {
@@ -97,7 +107,38 @@ public class ComposerDatesQuiz extends JFrame {
 	    }
 	}
 
-	public static void main(String[] args) {
+    public static class QuizFocusTraversalPolicy extends FocusTraversalPolicy {
+		
+		public QuizFocusTraversalPolicy(Vector<Component> requiredOrder) {
+			order = new Vector<Component>(requiredOrder.size());
+			order.addAll(requiredOrder);
+		}
+		
+		public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
+			int idx = (order.indexOf(aComponent) + 1) % order.size();
+			return order.get(idx);
+		}
+		public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
+			int index = order.indexOf(aComponent) - 1;
+			if (index < 0) {
+				index = order.size() - 1;
+			}
+			return order.get(index);
+		}
+		public Component getDefaultComponent(Container focusCycleRoot) {
+			return order.get(0);
+		}
+		public Component getLastComponent(Container focusCycleRoot) {
+			return order.lastElement();
+		}
+		public Component getFirstComponent(Container focusCycleRoot) {
+			return order.get(0);
+		}
+
+		private Vector<Component> order;
+	}
+
+    public static void main(String[] args) {
 		ComposerDatesQuiz quiz = new ComposerDatesQuiz();
 		quiz.setVisible(true);
 		quiz.poseQuestion();
