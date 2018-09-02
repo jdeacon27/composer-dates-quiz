@@ -5,11 +5,14 @@ import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Vector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
@@ -45,6 +48,7 @@ public class ComposerDatesQuiz extends JFrame {
 	    		} else {
 	    			resultField.setText(birthyear + " - " + deathyear);
 	    		}
+	    		composerNamePrompt.setText(currentComposer.familiarName());
 	    		nextButton.requestFocusInWindow();
 	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(nextButton);
 	    	}
@@ -52,16 +56,16 @@ public class ComposerDatesQuiz extends JFrame {
 		this.add(submitButton);
 		
 		/*JButton*/ nextButton.setBounds(50, 300, 100, 40);
-	    nextButton.addActionListener(new ActionListener() {
-	    	public void actionPerformed(ActionEvent e) {
-	    		birthAnswerField.setText("");
-	    		deathAnswerField.setText("");
-	    		resultField.setText("");
-	    		poseQuestion();
-	    		birthAnswerField.requestFocusInWindow();
-	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(submitButton);
-	    	}
-	    });
+			nextButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				birthAnswerField.setText("");
+				deathAnswerField.setText("");
+				resultField.setText("");
+				poseQuestion();
+				birthAnswerField.requestFocusInWindow();
+				ComposerDatesQuiz.this.getRootPane().setDefaultButton(submitButton);
+			}
+		});
 		this.add(nextButton);
 		
 		/*JRadioButton*/ knownComposers.setBounds(170, 290, 130, 30);
@@ -75,6 +79,17 @@ public class ComposerDatesQuiz extends JFrame {
 		allComposers.addActionListener(rbActionListener);
 		this.add(knownComposers);
 		this.add(allComposers);
+		
+		JCheckBox forenames = new JCheckBox("Quiz forenames?");
+		forenames.setBounds(50, 370, 130, 30);
+		forenames.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if ( e.getStateChange() == ItemEvent.SELECTED ) {
+					quizzingForenames = true;
+				}
+			}
+		});
+		this.add(forenames);
 		
 		this.setSize(400,500);		// width, height
 		this.setLayout(null);		//using no layout managers
@@ -136,7 +151,9 @@ public class ComposerDatesQuiz extends JFrame {
     public static void main(String[] args) {
 		ComposerDatesQuiz quiz = new ComposerDatesQuiz();
 		quiz.setVisible(true);
-		quiz.poseQuestion();
+		// quiz.poseQuestion();
+		quiz.nextButton.requestFocusInWindow();
+		quiz.getRootPane().setDefaultButton(quiz.nextButton);
 	}
 
 	protected void poseQuestion() {
@@ -145,7 +162,11 @@ public class ComposerDatesQuiz extends JFrame {
 		} else {
 			currentComposer = sessionChooser.nextShuffledComposer();
 		}
-		composerNamePrompt.setText(currentComposer.familiarName());
+		if ( quizzingForenames ) {
+			composerNamePrompt.setText(currentComposer.lastName());
+		} else {
+			composerNamePrompt.setText(currentComposer.familiarName());
+		}
 		birthyear = currentComposer.birthyear();
 		deathyear = currentComposer.deathyear();
 		return;
@@ -157,6 +178,7 @@ public class ComposerDatesQuiz extends JFrame {
 	private String birthyear;
 	private String deathyear;
 	private boolean quizzingKnownComposers;
+	private boolean quizzingForenames;
 	
     private JLabel composerNamePrompt = new JLabel();
     private JTextField birthAnswerField = new JTextField();
