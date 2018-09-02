@@ -26,3 +26,6 @@ If the CSV file is edited, one has to be VERY CAREFUL. Editing in Excel, for exa
 won't work because Excel's CSV export is very bad at handling encodings, and it's very easy to
 lose all the accented letters. I use a good text editor like Notepad++, or OpenOffice. I think
 I exported the CSV from OpenOffice using UTF8.
+
+There is a jar file in addition to the sources. It doesn't include the database (the CSV file).
+I'm not even sure if it could. Anyway, you'd need to download the CSV with the jar file.
