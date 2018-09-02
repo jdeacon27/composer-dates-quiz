@@ -12,11 +12,10 @@ import javax.swing.JRadioButton;
 // import javax.swing.SwingUtilities;	// In case I wanted to set the TAB order?	
 
 public class ComposerDatesQuiz extends JFrame {
-	private static final long serialVersionUID = 6312869237473479611L;
 	public ComposerDatesQuiz() {
 		super("Composer Dates Quiz");
         
-		composerNamePrompt.setBounds(50, 50, 300, 30);		// x axis, y axis, width, height
+		/*JLabel*/ composerNamePrompt.setBounds(50, 50, 300, 30);		// x axis, y axis, width, height
 	    this.add(composerNamePrompt);
 	    Font font = composerNamePrompt.getFont();
 	    Font infoFont = font.deriveFont(Font.PLAIN);
@@ -26,22 +25,21 @@ public class ComposerDatesQuiz extends JFrame {
 	    userGuidance.setFont(infoFont);
 	    this.add(userGuidance);
 
-	    birthAnswerField.setBounds(50, 100, 80, 30);
+	    /*JTextField*/ birthAnswerField.setBounds(50, 100, 80, 30);
 	    this.add(birthAnswerField);
 
 	    JLabel datesHyphen = new JLabel("-");
 	    datesHyphen.setBounds(150, 100, 20, 30);
 	    this.add(datesHyphen);
 
-	    // JTextField deathAnswerField = new JTextField();
-	    deathAnswerField.setBounds(180, 100, 80, 30);
+	    /*JTextField*/ deathAnswerField.setBounds(180, 100, 80, 30);
 	    this.add(deathAnswerField);
 
 	    JLabel resultField = new JLabel();
 	    resultField.setBounds(50, 150, 300, 30);
 	    this.add(resultField);
 
-	    submitButton.setBounds(50, 200, 100, 40);
+	    /*JButton*/ submitButton.setBounds(50, 200, 100, 40);
 	    submitButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String birthAnswer = birthAnswerField.getText();
@@ -56,7 +54,7 @@ public class ComposerDatesQuiz extends JFrame {
 	    });  		          
 		this.add(submitButton);
 		
-	    nextButton.setBounds(50, 300, 100, 40);
+		/*JButton*/ nextButton.setBounds(50, 300, 100, 40);
 	    nextButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		birthAnswerField.setText("");
@@ -68,17 +66,8 @@ public class ComposerDatesQuiz extends JFrame {
 	    });
 		this.add(nextButton);
 		
-	    JButton stopButton = new JButton("Stop");
-	    stopButton.setBounds(50, 400, 100, 40);
-	    stopButton.addActionListener(new ActionListener() {
-	    	public void actionPerformed(ActionEvent e) {
-	    		ComposerDatesQuiz.this.dispose();
-	    	}
-	    });
-		this.add(stopButton);
-		
-		knownComposers.setBounds(170, 290, 130, 30);
-		allComposers.setBounds(170, 320, 130, 30);
+		/*JRadioButton*/ knownComposers.setBounds(170, 290, 130, 30);
+		/*JRadioButton*/ allComposers.setBounds(170, 320, 130, 30);
 		ButtonGroup akGroup = new ButtonGroup();
 		akGroup.add(allComposers);
 		akGroup.add(knownComposers);
@@ -94,6 +83,7 @@ public class ComposerDatesQuiz extends JFrame {
         this.setLocationByPlatform(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+
 	class RadioButtonActionListener implements ActionListener {
 	    @Override
 	    public void actionPerformed(ActionEvent event) {
@@ -125,7 +115,6 @@ public class ComposerDatesQuiz extends JFrame {
 		return;
 	}
 	
-	// Shouldn't all or most of these become instance variables?
 	private ComposerDatabase composerDatabase = new ComposerDatabase();
 	private Chooser sessionChooser = new Chooser(composerDatabase);
 	private Composer currentComposer;
@@ -140,4 +129,5 @@ public class ComposerDatesQuiz extends JFrame {
     private JButton nextButton = new JButton("Next");
 	private JRadioButton knownComposers = new JRadioButton("Known Composers");
 	private JRadioButton allComposers = new JRadioButton("All Composers");
+	private static final long serialVersionUID = 6312869237473479611L;
 }
