@@ -16,6 +16,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import javax.swing.SwingUtilities;
 
 public class ComposerDatesQuiz extends JFrame {
 	public ComposerDatesQuiz() {
@@ -149,11 +150,22 @@ public class ComposerDatesQuiz extends JFrame {
 	}
 
     public static void main(String[] args) {
-		ComposerDatesQuiz quiz = new ComposerDatesQuiz();
-		quiz.setVisible(true);
-		// quiz.poseQuestion();
-		quiz.nextButton.requestFocusInWindow();
-		quiz.getRootPane().setDefaultButton(quiz.nextButton);
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				ComposerDatesQuiz quiz = new ComposerDatesQuiz();
+				quiz.setVisible(true);
+				quiz.nextButton.requestFocusInWindow();
+				quiz.getRootPane().setDefaultButton(quiz.nextButton);
+			}
+		});
+		
+//		ComposerDatesQuiz quiz = new ComposerDatesQuiz();
+//		quiz.setVisible(true);
+//		// quiz.poseQuestion();
+//		quiz.nextButton.requestFocusInWindow();
+//		quiz.getRootPane().setDefaultButton(quiz.nextButton);
 	}
 
 	protected void poseQuestion() {
