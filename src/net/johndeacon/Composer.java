@@ -11,10 +11,8 @@ public class Composer {
 		_deathYear = deathYear;
 		List<String> familiarNamewWords = new ArrayList<>(Arrays.asList(familiarName.split(" ")));
 		_lastName = familiarNamewWords.get(familiarNamewWords.size() - 1);
-		System.out.println(_lastName);
 		familiarNamewWords.remove(familiarNamewWords.size() - 1);
 		_foreNames = String.join(" ", familiarNamewWords);
-		System.out.println(_foreNames);
 	}
 	
 	protected String familiarName() { return _familiarName; }
