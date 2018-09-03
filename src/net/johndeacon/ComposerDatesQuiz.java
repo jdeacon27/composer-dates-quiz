@@ -1,5 +1,6 @@
 package net.johndeacon;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
@@ -15,29 +16,40 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 public class ComposerDatesQuiz extends JFrame {
 	public ComposerDatesQuiz() {
 		super("Composer Dates Quiz");
         
+		JTabbedPane tabbedPane = new JTabbedPane();
+		JPanel lifetimePanel = new JPanel(new BorderLayout());
+		JPanel onthisDayPanel = new JPanel(new BorderLayout());
+		
+		this.add(tabbedPane);
+
+		tabbedPane.add("Lifetimes", lifetimePanel);
+		tabbedPane.add("On this day", onthisDayPanel);
+		
 		/*JLabel*/ composerNamePrompt.setBounds(50, 50, 300, 30);		// x axis, y axis, width, height
-	    this.add(composerNamePrompt);
+		lifetimePanel.add(composerNamePrompt);
 	    
 	    /*JTextField*/ birthAnswerField.setBounds(50, 100, 80, 30);
-	    this.add(birthAnswerField);
+	    lifetimePanel.add(birthAnswerField);
 
 	    JLabel datesHyphen = new JLabel("-");
 	    datesHyphen.setBounds(150, 100, 20, 30);
-	    this.add(datesHyphen);
+	    lifetimePanel.add(datesHyphen);
 
 	    /*JTextField*/ deathAnswerField.setBounds(180, 100, 80, 30);
-	    this.add(deathAnswerField);
+	    lifetimePanel.add(deathAnswerField);
 
 	    JLabel resultField = new JLabel();
 	    resultField.setBounds(50, 150, 300, 30);
-	    this.add(resultField);
+	    lifetimePanel.add(resultField);
 
 	    /*JButton*/ submitButton.setBounds(50, 200, 100, 40);
 	    submitButton.addActionListener(new ActionListener() {
@@ -54,7 +66,7 @@ public class ComposerDatesQuiz extends JFrame {
 	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(nextButton);
 	    	}
 	    });  		          
-		this.add(submitButton);
+	    lifetimePanel.add(submitButton);
 		
 		/*JButton*/ nextButton.setBounds(50, 300, 100, 40);
 			nextButton.addActionListener(new ActionListener() {
@@ -67,7 +79,7 @@ public class ComposerDatesQuiz extends JFrame {
 				ComposerDatesQuiz.this.getRootPane().setDefaultButton(submitButton);
 			}
 		});
-		this.add(nextButton);
+		lifetimePanel.add(nextButton);
 		
 		/*JRadioButton*/ knownComposers.setBounds(170, 290, 130, 30);
 		/*JRadioButton*/ allComposers.setBounds(170, 320, 130, 30);
@@ -78,8 +90,8 @@ public class ComposerDatesQuiz extends JFrame {
 		RadioButtonActionListener rbActionListener = new RadioButtonActionListener();
 		knownComposers.addActionListener(rbActionListener);
 		allComposers.addActionListener(rbActionListener);
-		this.add(knownComposers);
-		this.add(allComposers);
+		lifetimePanel.add(knownComposers);
+		lifetimePanel.add(allComposers);
 		
 		JCheckBox forenames = new JCheckBox("Quiz forenames?");
 		forenames.setBounds(50, 370, 130, 30);
@@ -90,19 +102,20 @@ public class ComposerDatesQuiz extends JFrame {
 				}
 			}
 		});
-		this.add(forenames);
+		lifetimePanel.add(forenames);
 		
 		this.setSize(400,500);		// width, height
 		this.setLayout(null);		//using no layout managers
-		this.getRootPane().setDefaultButton(submitButton);
+		lifetimePanel.getRootPane().setDefaultButton(submitButton);
         this.setLocationByPlatform(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Vector<Component> order = new Vector<Component>(4);
+        
+		Vector<Component> order = new Vector<Component>(4);
         order.add(birthAnswerField);
         order.add(deathAnswerField);
         order.add(submitButton);
         order.add(nextButton);
-        this.setFocusTraversalPolicy(new QuizFocusTraversalPolicy(order));
+        lifetimePanel.setFocusTraversalPolicy(new QuizFocusTraversalPolicy(order));
 	}
 
 	class RadioButtonActionListener implements ActionListener {
