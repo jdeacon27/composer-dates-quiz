@@ -7,8 +7,8 @@ import java.util.Random;
 public class Chooser {
 	protected Chooser(ComposerDatabase database) {
 		_database = database;
-		_totalEntries = database.totalEntries();
-		_totalKnownEntries = database.totalKnownEntries();
+		_totalEntries = database.totalComposerEntries();
+		_totalKnownEntries = database.totalKnownComposerEntries();
 	}
 	
 	protected  Composer randomKnownComposer() {

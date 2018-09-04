@@ -139,6 +139,7 @@ public class ComposerDatesQuiz extends JFrame {
 		scrollPane.setBounds(50, 130, 290, 300);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		onThisDayPanel.add(scrollPane);
+		onThisDayAnswer.setText("Bach died\nSalieri was born");
 
 // Finish off the JFrame
 		this.setSize(400,500);		// width, height
