@@ -12,13 +12,16 @@ import java.util.Vector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 public class ComposerDatesQuiz extends JFrame {
@@ -34,7 +37,8 @@ public class ComposerDatesQuiz extends JFrame {
 		this.add(tabbedPane);
 		tabbedPane.add("Lifetimes", lifetimePanel);
 		tabbedPane.add("On this day", onThisDayPanel);
-		
+
+// Panel 1, the lifetime panel
 		/*JLabel*/ composerNamePrompt.setBounds(50, 40, 290, 30);		// x axis, y axis, width, height
 		composerNamePrompt.setOpaque(true);
 		composerNamePrompt.setBackground(Color.WHITE);
@@ -109,19 +113,41 @@ public class ComposerDatesQuiz extends JFrame {
 		});
 		lifetimePanel.add(forenames);
 		
-		this.setSize(400,500);		// width, height
-		lifetimePanel.getRootPane().setDefaultButton(submitButton);
-        this.setLocationByPlatform(true);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
 		Vector<Component> order = new Vector<Component>(4);
         order.add(birthAnswerField);
         order.add(deathAnswerField);
         order.add(submitButton);
         order.add(nextButton);
         lifetimePanel.setFocusTraversalPolicy(new QuizFocusTraversalPolicy(order));
-	}
+		
+// Panel 2, the onThisDay panel
+		onThisDayPanel.setOpaque(true);
+		
+        JTextArea explanation = new JTextArea(explanationText, 5,50);
+		explanation.setBounds(50, 10, 290, 30);
+		explanation.setEditable(false);
+		explanation.setOpaque(false);
+		onThisDayPanel.add(explanation);
+		
+		JLabel datePrompt = new JLabel("test text");
+		datePrompt.setBounds(50, 40, 290, 30);		// x axis, y axis, width, height
+		//datePrompt.setOpaque(true);
+		onThisDayPanel.add(datePrompt);
 
+		JTextArea onThisDayAnswer = new JTextArea();
+		JScrollPane scrollPane = new JScrollPane(onThisDayAnswer);
+		scrollPane.setBounds(50, 130, 290, 300);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		onThisDayPanel.add(scrollPane);
+
+// Finish off the JFrame
+		this.setSize(400,500);		// width, height
+		lifetimePanel.getRootPane().setDefaultButton(submitButton);
+        this.setLocationByPlatform(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+	}
+	
 	class RadioButtonActionListener implements ActionListener {
 	    @Override
 	    public void actionPerformed(ActionEvent event) {
@@ -211,5 +237,7 @@ public class ComposerDatesQuiz extends JFrame {
     private JButton nextButton = new JButton("Next");
 	private JRadioButton knownComposers = new JRadioButton("Known Composers");
 	private JRadioButton allComposers = new JRadioButton("All Composers");
+	
+	private String explanationText = "You're not expected to write anything,\njust think about the answer and press Enter.";
 	private static final long serialVersionUID = 6312869237473479611L;
 }
