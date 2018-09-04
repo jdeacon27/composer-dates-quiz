@@ -118,6 +118,8 @@ public class ComposerDatesQuiz extends JFrame {
         order.add(deathAnswerField);
         order.add(submitButton);
         order.add(nextButton);
+        lifetimePanel.setFocusTraversalPolicyProvider(true);
+        System.out.println("lifetime panel isFocusTraversalPolicyProvider() is " + lifetimePanel.isFocusTraversalPolicyProvider());
         lifetimePanel.setFocusTraversalPolicy(new QuizFocusTraversalPolicy(order));
 		
 // Panel 2, the onThisDay panel
@@ -163,15 +165,14 @@ public class ComposerDatesQuiz extends JFrame {
 	}
 
     public static class QuizFocusTraversalPolicy extends FocusTraversalPolicy {
-		
 		public QuizFocusTraversalPolicy(Vector<Component> requiredOrder) {
 			order = new Vector<Component>(requiredOrder.size());
 			order.addAll(requiredOrder);
 		}
 		
 		public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
-			int idx = (order.indexOf(aComponent) + 1) % order.size();
-			return order.get(idx);
+			int index = (order.indexOf(aComponent) + 1) % order.size();
+			return order.get(index);
 		}
 		public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
 			int index = order.indexOf(aComponent) - 1;
