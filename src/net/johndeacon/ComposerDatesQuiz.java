@@ -1,6 +1,5 @@
 package net.johndeacon;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
@@ -26,15 +25,16 @@ public class ComposerDatesQuiz extends JFrame {
 		super("Composer Dates Quiz");
         
 		JTabbedPane tabbedPane = new JTabbedPane();
-		JPanel lifetimePanel = new JPanel(new BorderLayout());
-		JPanel onthisDayPanel = new JPanel(new BorderLayout());
+		JPanel lifetimePanel = new JPanel();
+		lifetimePanel.setLayout(null);
+		JPanel onThisDayPanel = new JPanel();
+		onThisDayPanel.setLayout(null);
 		
 		this.add(tabbedPane);
-
 		tabbedPane.add("Lifetimes", lifetimePanel);
-		tabbedPane.add("On this day", onthisDayPanel);
+		tabbedPane.add("On this day", onThisDayPanel);
 		
-		/*JLabel*/ composerNamePrompt.setBounds(50, 50, 300, 30);		// x axis, y axis, width, height
+		/*JLabel*/ composerNamePrompt.setBounds(50, 40, 300, 30);		// x axis, y axis, width, height
 		lifetimePanel.add(composerNamePrompt);
 	    
 	    /*JTextField*/ birthAnswerField.setBounds(50, 100, 80, 30);
@@ -51,7 +51,7 @@ public class ComposerDatesQuiz extends JFrame {
 	    resultField.setBounds(50, 150, 300, 30);
 	    lifetimePanel.add(resultField);
 
-	    /*JButton*/ submitButton.setBounds(50, 200, 100, 40);
+	    /*JButton*/ submitButton.setBounds(50, 210, 100, 40);
 	    submitButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String birthAnswer = birthAnswerField.getText();
@@ -105,7 +105,6 @@ public class ComposerDatesQuiz extends JFrame {
 		lifetimePanel.add(forenames);
 		
 		this.setSize(400,500);		// width, height
-		this.setLayout(null);		//using no layout managers
 		lifetimePanel.getRootPane().setDefaultButton(submitButton);
         this.setLocationByPlatform(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -188,7 +187,7 @@ public class ComposerDatesQuiz extends JFrame {
 			currentComposer = sessionChooser.nextShuffledComposer();
 		}
 		if ( quizzingForenames ) {
-			composerNamePrompt.setText(currentComposer.lastName());
+			composerNamePrompt.setText("? " + currentComposer.lastName());
 		} else {
 			composerNamePrompt.setText(currentComposer.familiarName());
 		}
