@@ -1,5 +1,6 @@
 package net.johndeacon;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
@@ -34,7 +35,9 @@ public class ComposerDatesQuiz extends JFrame {
 		tabbedPane.add("Lifetimes", lifetimePanel);
 		tabbedPane.add("On this day", onThisDayPanel);
 		
-		/*JLabel*/ composerNamePrompt.setBounds(50, 40, 300, 30);		// x axis, y axis, width, height
+		/*JLabel*/ composerNamePrompt.setBounds(50, 40, 290, 30);		// x axis, y axis, width, height
+		composerNamePrompt.setOpaque(true);
+		composerNamePrompt.setBackground(Color.WHITE);
 		lifetimePanel.add(composerNamePrompt);
 	    
 	    /*JTextField*/ birthAnswerField.setBounds(50, 100, 80, 30);
@@ -48,8 +51,10 @@ public class ComposerDatesQuiz extends JFrame {
 	    lifetimePanel.add(deathAnswerField);
 
 	    JLabel resultField = new JLabel();
-	    resultField.setBounds(50, 150, 300, 30);
-	    lifetimePanel.add(resultField);
+	    resultField.setBounds(50, 150, 290, 30);
+		resultField.setOpaque(true);
+		resultField.setBackground(Color.WHITE);
+		lifetimePanel.add(resultField);
 
 	    /*JButton*/ submitButton.setBounds(50, 210, 100, 40);
 	    submitButton.addActionListener(new ActionListener() {

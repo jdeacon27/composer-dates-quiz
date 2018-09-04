@@ -18,7 +18,6 @@ public class ComposerDatabase {
 				if ( nextRecord[knownComposerField].length() != 0 ) {
 					knownComposerIndices.add(allComposers.size()-1);	// size is 1 greater than the index of the last element
 				}
-				numberOfKnownComposers = knownComposerIndices.size();
 			}
 			reader.close();
 		} catch(IOException e) {
@@ -38,11 +37,10 @@ public class ComposerDatabase {
 	private List<Composer> allComposers= new ArrayList<>();
 	private List<Integer> knownComposerIndices = new ArrayList<>();
 	// Current layout of CSV file follows
-	private int familyNameFirstField = 0;
+	//private int familyNameFirstField = 0;
 	private int foreNameFirstField = 1;
 	private int birthYearField = 2;
 	private int deathYearField = 3;
-	private int ageField = 4;			// Currently, in the database file this is just a subtraction so can be a year out
+	//private int ageField = 4;			// Currently, in the database file this is just a subtraction so can be a year out
 	private int knownComposerField = 5;
-	private int numberOfKnownComposers;
 }
