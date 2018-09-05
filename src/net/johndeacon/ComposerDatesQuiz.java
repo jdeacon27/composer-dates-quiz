@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.ButtonGroup;
@@ -24,6 +25,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+
 public class ComposerDatesQuiz extends JFrame {
 	public ComposerDatesQuiz() {
 		super("Composer Dates Quiz");
@@ -31,12 +33,12 @@ public class ComposerDatesQuiz extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane();
 		JPanel lifetimePanel = new JPanel();
 		lifetimePanel.setLayout(null);
-		JPanel onThisDayPanel = new JPanel();
-		onThisDayPanel.setLayout(null);
+		JPanel inThisYearPanel = new JPanel();
+		inThisYearPanel.setLayout(null);
 		
 		this.add(tabbedPane);
 		tabbedPane.add("Lifetimes", lifetimePanel);
-		tabbedPane.add("On this day", onThisDayPanel);
+		tabbedPane.add("In this year", inThisYearPanel);
 
 // Panel 1, the lifetime panel
 		/*JLabel*/ composerNamePrompt.setBounds(50, 40, 290, 30);		// x axis, y axis, width, height
@@ -60,8 +62,8 @@ public class ComposerDatesQuiz extends JFrame {
 		resultField.setBackground(Color.WHITE);
 		lifetimePanel.add(resultField);
 
-	    /*JButton*/ submitButton.setBounds(50, 210, 100, 40);
-	    submitButton.addActionListener(new ActionListener() {
+	    /*JButton*/ panel1SubmitButton.setBounds(50, 210, 100, 40);
+	    panel1SubmitButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String birthAnswer = birthAnswerField.getText();
 	    		String deathAnswer = deathAnswerField.getText();
@@ -71,24 +73,24 @@ public class ComposerDatesQuiz extends JFrame {
 	    			resultField.setText(birthyear + " - " + deathyear);
 	    		}
 	    		composerNamePrompt.setText(currentComposer.familiarName());
-	    		nextButton.requestFocusInWindow();
-	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(nextButton);
+	    		panel1NextButton.requestFocusInWindow();
+	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel1NextButton);
 	    	}
 	    });  		          
-	    lifetimePanel.add(submitButton);
+	    lifetimePanel.add(panel1SubmitButton);
 		
-		/*JButton*/ nextButton.setBounds(50, 300, 100, 40);
-			nextButton.addActionListener(new ActionListener() {
+		/*JButton*/ panel1NextButton.setBounds(50, 300, 100, 40);
+		panel1NextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				birthAnswerField.setText("");
 				deathAnswerField.setText("");
 				resultField.setText("");
-				poseQuestion();
+				poseComposerQuestion();
 				birthAnswerField.requestFocusInWindow();
-				ComposerDatesQuiz.this.getRootPane().setDefaultButton(submitButton);
+				ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel1SubmitButton);
 			}
 		});
-		lifetimePanel.add(nextButton);
+		lifetimePanel.add(panel1NextButton);
 		
 		/*JRadioButton*/ knownComposers.setBounds(170, 290, 130, 30);
 		/*JRadioButton*/ allComposers.setBounds(170, 320, 130, 30);
@@ -116,36 +118,61 @@ public class ComposerDatesQuiz extends JFrame {
 		Vector<Component> order = new Vector<Component>(4);
         order.add(birthAnswerField);
         order.add(deathAnswerField);
-        order.add(submitButton);
-        order.add(nextButton);
+        order.add(panel1SubmitButton);
+        order.add(panel1NextButton);
         lifetimePanel.setFocusTraversalPolicyProvider(true);
         System.out.println("lifetime panel isFocusTraversalPolicyProvider() is " + lifetimePanel.isFocusTraversalPolicyProvider());
         lifetimePanel.setFocusTraversalPolicy(new QuizFocusTraversalPolicy(order));
 		
-// Panel 2, the onThisDay panel
-		onThisDayPanel.setOpaque(true);
+// Panel 2 - on this day
+		inThisYearPanel.setOpaque(true);
 		
         JTextArea explanation = new JTextArea(explanationText, 5,50);
 		explanation.setBounds(50, 10, 290, 30);
 		explanation.setEditable(false);
 		explanation.setOpaque(false);
-		onThisDayPanel.add(explanation);
+		inThisYearPanel.add(explanation);
 		
-		JLabel datePrompt = new JLabel("test text");
-		datePrompt.setBounds(50, 40, 290, 30);		// x axis, y axis, width, height
+		/*JLabel*/ datePrompt.setBounds(50, 40, 290, 30);		// x axis, y axis, width, height
 		//datePrompt.setOpaque(true);
-		onThisDayPanel.add(datePrompt);
+		inThisYearPanel.add(datePrompt);
 
-		JTextArea onThisDayAnswer = new JTextArea();
+	    /*JButton*/ panel2SubmitButton.setBounds(50, 80, 100, 40);
+	    panel2SubmitButton.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		String inThisYearAnswerText = String.join("\n", eventsThisYear);
+	    		onThisDayAnswer.setText(inThisYearAnswerText);
+	    		panel2NextButton.requestFocusInWindow();
+	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel2NextButton);
+	    	}
+	    });  		          
+	    inThisYearPanel.add(panel2SubmitButton);
+
+	    /*JButton*/ panel2NextButton.setBounds(200, 80, 100, 40);
+		panel2NextButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				onThisDayAnswer.setText("");
+				poseYearQuestion();
+//				Year inQuestion = sessionChooser.nextShuffledYear();
+//				currentYear = inQuestion.yearAsStringCE();
+//				eventsThisYear = inQuestion.events();
+//				datePrompt.setText(currentYear);
+//				panel2SubmitButton.requestFocusInWindow();
+//				ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel2SubmitButton);
+			}
+		});
+		inThisYearPanel.add(panel2NextButton);
+
+		/*JTextArea*/ onThisDayAnswer = new JTextArea();
 		JScrollPane scrollPane = new JScrollPane(onThisDayAnswer);
 		scrollPane.setBounds(50, 130, 290, 300);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		onThisDayPanel.add(scrollPane);
-		onThisDayAnswer.setText("Bach died\nSalieri was born");
+		inThisYearPanel.add(scrollPane);
+		onThisDayAnswer.setText("");
 
 // Finish off the JFrame
 		this.setSize(400,500);		// width, height
-		lifetimePanel.getRootPane().setDefaultButton(submitButton);
+		lifetimePanel.getRootPane().setDefaultButton(panel1SubmitButton);
         this.setLocationByPlatform(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -201,14 +228,15 @@ public class ComposerDatesQuiz extends JFrame {
 			public void run() {
 				ComposerDatesQuiz quiz = new ComposerDatesQuiz();
 				quiz.setVisible(true);
-				quiz.nextButton.requestFocusInWindow();
-				quiz.getRootPane().setDefaultButton(quiz.nextButton);
+				quiz.panel1NextButton.requestFocusInWindow();
+				quiz.getRootPane().setDefaultButton(quiz.panel1NextButton);
+				quiz.poseYearQuestion();
 			}
 		});
 		
 	}
 
-	protected void poseQuestion() {
+	protected void poseComposerQuestion() {
 		if ( quizzingKnownComposers ) {
 			currentComposer = sessionChooser.nextShuffledKnownComposer();
 		} else {
@@ -223,6 +251,14 @@ public class ComposerDatesQuiz extends JFrame {
 		deathyear = currentComposer.deathyear();
 		return;
 	}
+	protected void poseYearQuestion() {
+		Year inQuestion = sessionChooser.nextShuffledYear();
+		currentYear = inQuestion.yearAsStringCE();
+		eventsThisYear = inQuestion.events();
+		datePrompt.setText(currentYear);
+		panel2SubmitButton.requestFocusInWindow();
+		ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel2SubmitButton);
+	}
 	
 	private ComposerDatabase composerDatabase = new ComposerDatabase();
 	private Chooser sessionChooser = new Chooser(composerDatabase);
@@ -231,14 +267,21 @@ public class ComposerDatesQuiz extends JFrame {
 	private String deathyear;
 	private boolean quizzingKnownComposers;
 	private boolean quizzingForenames;
+	private String currentYear;
+	private List<String> eventsThisYear;
 	
     private JLabel composerNamePrompt = new JLabel();
     private JTextField birthAnswerField = new JTextField();
     private JTextField deathAnswerField = new JTextField();
-    private JButton submitButton = new JButton("Respond");
-    private JButton nextButton = new JButton("Next");
+    private JButton panel1SubmitButton = new JButton("Respond");
+    private JButton panel1NextButton = new JButton("Next");
 	private JRadioButton knownComposers = new JRadioButton("Known Composers");
 	private JRadioButton allComposers = new JRadioButton("All Composers");
+
+	private JLabel datePrompt = new JLabel("");
+	private JButton panel2SubmitButton = new JButton("Respond");
+    private JButton panel2NextButton = new JButton("Next");
+    private JTextArea onThisDayAnswer = new JTextArea(); 
 	
 	private String explanationText = "You're not expected to write anything,\njust think about the answer and press Enter.";
 	private static final long serialVersionUID = 6312869237473479611L;

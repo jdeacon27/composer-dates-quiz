@@ -23,16 +23,21 @@ public class ComposerDatabase {
 					
 					birthYear = Integer.parseInt(nextRecord[birthYearField]);
 					deathYear = Integer.parseInt(nextRecord[deathYearField]);
-					List<String> knownDateEntry;
-					knownDateEntry = knownDates.getOrDefault(birthYear, new ArrayList<String>());
-					knownDateEntry.add(nextRecord[foreNameFirstField] + " born");
-					knownDates.put(birthYear, knownDateEntry);
-					System.out.println(knownDateEntry + "\n");
+					Year knownYearEntry;
+					knownYearEntry = knownYears.getOrDefault(birthYear, new Year(birthYear, new ArrayList<String>()));
+					knownYearEntry.addEvent(nextRecord[foreNameFirstField] + " born");
+					knownYears.put(birthYear, knownYearEntry);
+					System.out.println(birthYear + " " + knownYearEntry + "\n");
 
-					knownDateEntry = knownDates.getOrDefault(deathYear, new ArrayList<String>());
-					knownDateEntry.add(nextRecord[foreNameFirstField] + " died");
-					knownDates.put(deathYear, knownDateEntry);
-					System.out.println(knownDateEntry + "\n");
+					knownYearEntry = knownYears.getOrDefault(deathYear, new Year(deathYear, new ArrayList<String>()));
+					knownYearEntry.addEvent(nextRecord[foreNameFirstField] + " died");
+					knownYears.put(deathYear, knownYearEntry);
+					System.out.println(deathYear + " " + knownYearEntry + "\n");
+					
+					/* While building, a map is convenient; but from then on access is (currently)
+					   only by (random) position, so now we'll build an ArrayList from the entries.
+					*/
+					knownYearsIndexed = new ArrayList<Year>(knownYears.values());
 				}
 			}
 			reader.close();
@@ -43,16 +48,25 @@ public class ComposerDatabase {
 	
 	protected int totalComposerEntries() { return allComposers.size(); }
 	protected int totalKnownComposerEntries() { return knownComposerIndices.size(); }
+	protected int totalYearsKnown() { return knownYears.size(); }
 	protected Composer knownComposer(int index) {
 		return allComposers.get(knownComposerIndices.get(index));
 	}
 	protected Composer anyComposer(int index) {
 		return allComposers.get(index);
 	}
+	protected List<String> eventsInYear(int thisYear) {
+		return knownYears.get(thisYear).events();
+	}
+	protected Year yearByIndex(int index) {
+		return knownYearsIndexed.get(index);
+	}
 	
 	private List<Composer> allComposers= new ArrayList<>();
 	private List<Integer> knownComposerIndices = new ArrayList<>();
-	private Map<Integer,List<String>> knownDates = new HashMap<>();
+	private Map<Integer,Year> knownYears = new HashMap<>();
+	private List<Year> knownYearsIndexed;
+	
 	// Current layout of CSV file follows
 	//private int familyNameFirstField = 0;
 	private int foreNameFirstField = 1;
