@@ -24,6 +24,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 public class ComposerDatesQuiz extends JFrame {
@@ -39,6 +41,7 @@ public class ComposerDatesQuiz extends JFrame {
 		this.add(tabbedPane);
 		tabbedPane.add("Lifetimes", lifetimePanel);
 		tabbedPane.add("In this year", inThisYearPanel);
+		tabbedPane.addChangeListener(new TabbedPaneSelection());
 
 // Panel 1, the lifetime panel
 		/*JLabel*/ composerNamePrompt.setBounds(50, 40, 290, 30);		// x axis, y axis, width, height
@@ -152,6 +155,8 @@ public class ComposerDatesQuiz extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				onThisDayAnswer.setText("");
 				poseYearQuestion();
+				panel2SubmitButton.requestFocusInWindow();
+				ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel2SubmitButton);
 			}
 		});
 		inThisYearPanel.add(panel2NextButton);
@@ -170,7 +175,10 @@ public class ComposerDatesQuiz extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
 	}
+
 	
+// Inner or instance classes follow. An instance of such a class will be contained within each instance of the containing class. They have access to the outer instance's members.
+
 	class RadioButtonActionListener implements ActionListener {
 	    @Override
 	    public void actionPerformed(ActionEvent event) {
@@ -184,34 +192,19 @@ public class ComposerDatesQuiz extends JFrame {
 	    }
 	}
 
-    public static class QuizFocusTraversalPolicy extends FocusTraversalPolicy {
-		public QuizFocusTraversalPolicy(Vector<Component> requiredOrder) {
-			order = new Vector<Component>(requiredOrder.size());
-			order.addAll(requiredOrder);
-		}
-		
-		public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
-			int index = (order.indexOf(aComponent) + 1) % order.size();
-			return order.get(index);
-		}
-		public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
-			int index = order.indexOf(aComponent) - 1;
-			if (index < 0) {
-				index = order.size() - 1;
-			}
-			return order.get(index);
-		}
-		public Component getDefaultComponent(Container focusCycleRoot) {
-			return order.get(0);
-		}
-		public Component getLastComponent(Container focusCycleRoot) {
-			return order.lastElement();
-		}
-		public Component getFirstComponent(Container focusCycleRoot) {
-			return order.get(0);
-		}
+	class TabbedPaneSelection implements ChangeListener {
+	    public void stateChanged(ChangeEvent event) {
+	        JTabbedPane tabbedPane = (JTabbedPane) event.getSource();
+	        int selectedIndex = tabbedPane.getSelectedIndex();
+	        if ( selectedIndex == 0 ) {
+				panel1NextButton.requestFocusInWindow();
+				panel1NextButton.getRootPane().setDefaultButton(panel1NextButton);
+	        } else {
+				panel2SubmitButton.requestFocusInWindow();
+				panel2SubmitButton.getRootPane().setDefaultButton(panel2SubmitButton);
+	        }
+	    }
 
-		private Vector<Component> order;
 	}
 
     public static void main(String[] args) {
@@ -250,8 +243,6 @@ public class ComposerDatesQuiz extends JFrame {
 		currentYear = inQuestion.yearAsStringCE();
 		eventsThisYear = inQuestion.events();
 		datePrompt.setText(currentYear);
-		panel2SubmitButton.requestFocusInWindow();
-		ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel2SubmitButton);
 	}
 	
 	private ComposerDatabase composerDatabase = new ComposerDatabase();
@@ -279,4 +270,30 @@ public class ComposerDatesQuiz extends JFrame {
 	
 	private String explanationText = "You're not expected to write anything,\njust think about the answer and press Enter.";
 	private static final long serialVersionUID = 6312869237473479611L;
+
+// Class classes follow. Regular classes and class definitions except that they are name scoped to the containing class definition    
+	public static class QuizFocusTraversalPolicy extends FocusTraversalPolicy {
+		public QuizFocusTraversalPolicy(Vector<Component> requiredOrder) {
+			order = new Vector<Component>(requiredOrder.size());
+			order.addAll(requiredOrder);
+		}
+		
+		public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
+			int index = (order.indexOf(aComponent) + 1) % order.size();
+			return order.get(index);
+		}
+		public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
+			int index = order.indexOf(aComponent) - 1;
+			if (index < 0) {
+				index = order.size() - 1;
+			}
+			return order.get(index);
+		}
+		public Component getDefaultComponent(Container focusCycleRoot) { return order.get(0); }
+		public Component getLastComponent(Container focusCycleRoot) { return order.lastElement(); }
+		public Component getFirstComponent(Container focusCycleRoot) { return order.get(0); }
+
+		private Vector<Component> order;
+	}
+	
 }

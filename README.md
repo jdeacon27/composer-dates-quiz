@@ -6,10 +6,19 @@ I was an Eclipse user long ago. I wanted to get up-to-date with using Eclipse (J
 So this is a little play project.
 
 It will read a database of composer names and dates and then quizz the user for the composer's dates.
-It's reached the point where it's runnable working from an unsophisticated GUI. If you get both
+It's reached the point where it's runnable, working from an unsophisticated GUI. If you get both
 the birth and death dates correct, you'll be told so. If you omit either or both dates, or
-get any dates wrong, you will be shown the correct dates. Use the Tab and Enter keys or the
-mouse.
+get any dates wrong, you will be shown the correct dates. 
+
+You can select to quiz on all the
+composers in the file or just on those marked as memorized (see below).
+
+You can also elect to be quizzed on forenames. If you do, only the last name will be in the
+prompt and the forenames will be revealed when you submit the composer's lifetime dates.
+
+There is a second tab for In This Year questions. A date selected from the memorized composers
+is displayed and you try to recall any births or deaths in that year. You don't actually write
+an answer you simply hit the Respond button and see if you were right.
 
 It is moderately object oriented.
 
