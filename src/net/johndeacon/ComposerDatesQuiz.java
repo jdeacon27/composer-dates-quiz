@@ -44,28 +44,29 @@ public class ComposerDatesQuiz extends JFrame {
 		tabbedPane.addChangeListener(new TabbedPaneSelection());
 
 // Panel 1, the lifetime panel
-		/*JLabel*/ composerNamePrompt.setBounds(50, 40, 290, 30);		// x axis, y axis, width, height
+		/*JLabel*/ composerNamePrompt.setBounds(50, 30, 290, 30);		// x axis, y axis, width, height
 		composerNamePrompt.setOpaque(true);
 		composerNamePrompt.setBackground(Color.WHITE);
 		lifetimePanel.add(composerNamePrompt);
 	    
-	    /*JTextField*/ birthAnswerField.setBounds(50, 100, 80, 30);
+	    /*JTextField*/ birthAnswerField.setBounds(50, 90, 80, 30);
 	    lifetimePanel.add(birthAnswerField);
 
 	    JLabel datesHyphen = new JLabel("-");
-	    datesHyphen.setBounds(150, 100, 20, 30);
+	    datesHyphen.setBounds(150, 90, 20, 30);
 	    lifetimePanel.add(datesHyphen);
 
-	    /*JTextField*/ deathAnswerField.setBounds(180, 100, 80, 30);
+	    /*JTextField*/ deathAnswerField.setBounds(180, 90, 80, 30);
 	    lifetimePanel.add(deathAnswerField);
 
 	    JLabel resultField = new JLabel();
-	    resultField.setBounds(50, 150, 290, 30);
+	    resultField.setBounds(50, 150, 280, 30);
 		resultField.setOpaque(true);
 		resultField.setBackground(Color.WHITE);
 		lifetimePanel.add(resultField);
 
-	    /*JButton*/ panel1SubmitButton.setBounds(50, 210, 100, 40);
+	    /*JButton*/ panel1SubmitButton.setText("Respond");
+		panel1SubmitButton.setBounds(50, 200, 100, 40);
 	    panel1SubmitButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String birthAnswer = birthAnswerField.getText();
@@ -82,7 +83,8 @@ public class ComposerDatesQuiz extends JFrame {
 	    });  		          
 	    lifetimePanel.add(panel1SubmitButton);
 		
-		/*JButton*/ panel1NextButton.setBounds(50, 300, 100, 40);
+		/*JButton*/ panel1NextButton.setText("Next");
+	    panel1NextButton.setBounds(50, 290, 100, 40);
 		panel1NextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				birthAnswerField.setText("");
@@ -95,8 +97,10 @@ public class ComposerDatesQuiz extends JFrame {
 		});
 		lifetimePanel.add(panel1NextButton);
 		
-		/*JRadioButton*/ knownComposers.setBounds(170, 290, 130, 30);
-		/*JRadioButton*/ allComposers.setBounds(170, 320, 130, 30);
+		/*JRadioButton*/ knownComposers.setText("Known Composers"); 
+		knownComposers.setBounds(170, 280, 140, 30);
+		/*JRadioButton*/ allComposers.setText("All Composers"); 
+		allComposers.setBounds(170, 310, 140, 30);
 		ButtonGroup akGroup = new ButtonGroup();
 		akGroup.add(allComposers);
 		akGroup.add(knownComposers);
@@ -108,7 +112,7 @@ public class ComposerDatesQuiz extends JFrame {
 		lifetimePanel.add(allComposers);
 		
 		JCheckBox forenames = new JCheckBox("Quiz forenames?");
-		forenames.setBounds(50, 370, 130, 30);
+		forenames.setBounds(50, 360, 130, 30);
 		forenames.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if ( e.getStateChange() == ItemEvent.SELECTED ) {
@@ -118,6 +122,12 @@ public class ComposerDatesQuiz extends JFrame {
 		});
 		lifetimePanel.add(forenames);
 		
+	    /*JLabel*/ numbersInfo = new JLabel("(Quizzing from " + composerDatabase.totalKnownComposerEntries() + " composers)");
+	    numbersInfo.setBounds(50, 400, 290, 30);
+//	    numbersInfo.setOpaque(true);
+//	    numbersInfo.setBackground(Color.WHITE);
+		lifetimePanel.add(numbersInfo);
+
 		Vector<Component> order = new Vector<Component>(4);
         order.add(birthAnswerField);
         order.add(deathAnswerField);
@@ -139,7 +149,8 @@ public class ComposerDatesQuiz extends JFrame {
 		//datePrompt.setOpaque(true);
 		inThisYearPanel.add(datePrompt);
 
-	    /*JButton*/ panel2SubmitButton.setBounds(50, 80, 100, 40);
+	    /*JButton*/ panel2SubmitButton.setText("Reveal");
+	    panel2SubmitButton.setBounds(50, 80, 100, 40);
 	    panel2SubmitButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String inThisYearAnswerText = String.join("\n", eventsThisYear);
@@ -150,7 +161,8 @@ public class ComposerDatesQuiz extends JFrame {
 	    });  		          
 	    inThisYearPanel.add(panel2SubmitButton);
 
-	    /*JButton*/ panel2NextButton.setBounds(200, 80, 100, 40);
+	    /*JButton*/ panel2NextButton.setText("Next");
+	    panel2NextButton.setBounds(200, 80, 100, 40);
 		panel2NextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				onThisDayAnswer.setText("");
@@ -185,8 +197,10 @@ public class ComposerDatesQuiz extends JFrame {
 	        JRadioButton button = (JRadioButton) event.getSource();
 	 	    if (button == allComposers) {
 	 	        quizzingKnownComposers = false;
+ 	        	numbersInfo.setText("(Quizzing from " + composerDatabase.totalComposerEntries() + " composers)");
 	        } else if (button == knownComposers) {
  	        	quizzingKnownComposers = true;
+ 	        	numbersInfo.setText("(Quizzing from " + composerDatabase.totalKnownComposerEntries() + " composers)");
 	        }
 	 	    return;
 	    }
@@ -258,14 +272,15 @@ public class ComposerDatesQuiz extends JFrame {
     private JLabel composerNamePrompt = new JLabel();
     private JTextField birthAnswerField = new JTextField();
     private JTextField deathAnswerField = new JTextField();
-    private JButton panel1SubmitButton = new JButton("Respond");
-    private JButton panel1NextButton = new JButton("Next");
-	private JRadioButton knownComposers = new JRadioButton("Known Composers");
-	private JRadioButton allComposers = new JRadioButton("All Composers");
+    private JButton panel1SubmitButton = new JButton();
+    private JButton panel1NextButton = new JButton();
+	private JRadioButton knownComposers = new JRadioButton();
+	private JRadioButton allComposers = new JRadioButton();
+	private JLabel numbersInfo;
 
 	private JLabel datePrompt = new JLabel("");
-	private JButton panel2SubmitButton = new JButton("Respond");
-    private JButton panel2NextButton = new JButton("Next");
+	private JButton panel2SubmitButton = new JButton();
+    private JButton panel2NextButton = new JButton();
     private JTextArea onThisDayAnswer = new JTextArea(); 
 	
 	private String explanationText = "You're not expected to write anything,\njust think about the answer and press Enter.";
