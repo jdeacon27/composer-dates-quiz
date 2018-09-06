@@ -27,12 +27,10 @@ public class ComposerDatabase {
 					knownYearEntry = knownYears.getOrDefault(birthYear, new Year(birthYear, new ArrayList<String>()));
 					knownYearEntry.addEvent(nextRecord[foreNameFirstField] + " born");
 					knownYears.put(birthYear, knownYearEntry);
-					System.out.println(birthYear + " " + knownYearEntry + "\n");
 
 					knownYearEntry = knownYears.getOrDefault(deathYear, new Year(deathYear, new ArrayList<String>()));
 					knownYearEntry.addEvent(nextRecord[foreNameFirstField] + " died");
 					knownYears.put(deathYear, knownYearEntry);
-					System.out.println(deathYear + " " + knownYearEntry + "\n");
 					
 					/* While building, a map is convenient; but from then on access is (currently)
 					   only by (random) position, so now we'll build an ArrayList from the entries.

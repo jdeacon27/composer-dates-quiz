@@ -121,7 +121,6 @@ public class ComposerDatesQuiz extends JFrame {
         order.add(panel1SubmitButton);
         order.add(panel1NextButton);
         lifetimePanel.setFocusTraversalPolicyProvider(true);
-        System.out.println("lifetime panel isFocusTraversalPolicyProvider() is " + lifetimePanel.isFocusTraversalPolicyProvider());
         lifetimePanel.setFocusTraversalPolicy(new QuizFocusTraversalPolicy(order));
 		
 // Panel 2 - on this day
@@ -153,12 +152,6 @@ public class ComposerDatesQuiz extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				onThisDayAnswer.setText("");
 				poseYearQuestion();
-//				Year inQuestion = sessionChooser.nextShuffledYear();
-//				currentYear = inQuestion.yearAsStringCE();
-//				eventsThisYear = inQuestion.events();
-//				datePrompt.setText(currentYear);
-//				panel2SubmitButton.requestFocusInWindow();
-//				ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel2SubmitButton);
 			}
 		});
 		inThisYearPanel.add(panel2NextButton);
@@ -228,9 +221,10 @@ public class ComposerDatesQuiz extends JFrame {
 			public void run() {
 				ComposerDatesQuiz quiz = new ComposerDatesQuiz();
 				quiz.setVisible(true);
-				quiz.panel1NextButton.requestFocusInWindow();
-				quiz.getRootPane().setDefaultButton(quiz.panel1NextButton);
 				quiz.poseYearQuestion();
+				quiz.panel1NextButton.requestFocusInWindow();
+				quiz.panel1NextButton.getRootPane().setDefaultButton(quiz.panel1NextButton);
+				// This is asymmetric. One panel does these defaults here and the other elsewhere.
 			}
 		});
 		
