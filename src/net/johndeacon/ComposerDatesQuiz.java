@@ -296,13 +296,10 @@ public class ComposerDatesQuiz extends JFrame {
 		}
 		public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
 			int index = order.indexOf(aComponent) == 0 ? order.size() - 1 : order.indexOf(aComponent) - 1;
-//			if (index < 0) {
-//				index = order.size() - 1;
-//			}
 			return order.get(index);
 		}
 		public Component getDefaultComponent(Container focusCycleRoot) { return order.get(0); }
-		public Component getLastComponent(Container focusCycleRoot) { return order.get(order.size()); }
+		public Component getLastComponent(Container focusCycleRoot) { return order.get(order.size()-1); }
 		public Component getFirstComponent(Container focusCycleRoot) { return order.get(0); }
 
 		private List<Component> order;
