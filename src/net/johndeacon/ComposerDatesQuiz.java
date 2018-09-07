@@ -8,8 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
@@ -124,11 +124,9 @@ public class ComposerDatesQuiz extends JFrame {
 		
 	    /*JLabel*/ numbersInfo = new JLabel("(Quizzing from " + composerDatabase.totalKnownComposerEntries() + " composers)");
 	    numbersInfo.setBounds(50, 400, 290, 30);
-//	    numbersInfo.setOpaque(true);
-//	    numbersInfo.setBackground(Color.WHITE);
 		lifetimePanel.add(numbersInfo);
 
-		Vector<Component> order = new Vector<Component>(4);
+		List<Component> order = new ArrayList<Component>();
         order.add(birthAnswerField);
         order.add(deathAnswerField);
         order.add(panel1SubmitButton);
@@ -286,11 +284,10 @@ public class ComposerDatesQuiz extends JFrame {
 	private String explanationText = "You're not expected to write anything,\njust think about the answer and press Enter.";
 	private static final long serialVersionUID = 6312869237473479611L;
 
-// Class classes follow. Regular classes and class definitions except that they are name scoped to the containing class definition    
+// Class classes follow: regular classes and class definitions except that they are name scoped to the containing class definition    
 	public static class QuizFocusTraversalPolicy extends FocusTraversalPolicy {
-		public QuizFocusTraversalPolicy(Vector<Component> requiredOrder) {
-			order = new Vector<Component>(requiredOrder.size());
-			order.addAll(requiredOrder);
+		public QuizFocusTraversalPolicy(List<Component> requiredOrder) {
+			order = requiredOrder;
 		}
 		
 		public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
@@ -298,17 +295,17 @@ public class ComposerDatesQuiz extends JFrame {
 			return order.get(index);
 		}
 		public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
-			int index = order.indexOf(aComponent) - 1;
-			if (index < 0) {
-				index = order.size() - 1;
-			}
+			int index = order.indexOf(aComponent) == 0 ? order.size() - 1 : order.indexOf(aComponent) - 1;
+//			if (index < 0) {
+//				index = order.size() - 1;
+//			}
 			return order.get(index);
 		}
 		public Component getDefaultComponent(Container focusCycleRoot) { return order.get(0); }
-		public Component getLastComponent(Container focusCycleRoot) { return order.lastElement(); }
+		public Component getLastComponent(Container focusCycleRoot) { return order.get(order.size()); }
 		public Component getFirstComponent(Container focusCycleRoot) { return order.get(0); }
 
-		private Vector<Component> order;
+		private List<Component> order;
 	}
 	
 }
