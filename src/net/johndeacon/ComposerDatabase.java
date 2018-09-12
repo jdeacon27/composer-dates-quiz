@@ -25,7 +25,8 @@ public class ComposerDatabase {
 						nextRecord[foreNameFirstField],
 						nextRecord[birthYearField],
 						nextRecord[deathYearField],
-						nextRecord[ageField]));
+						nextRecord[ageField],
+						nextRecord[knownComposerField]));
 				if ( nextRecord[knownComposerField].length() != 0 ) {
 					knownComposerIndices.add(allComposers.size()-1);	// size is 1 greater than the index of the last element
 					
@@ -79,7 +80,8 @@ public class ComposerDatabase {
         				nextComposer.forenameFirstFullName(),
         				nextComposer.birthyear(),
         				nextComposer.deathyear(),
-        				"Pad", "Pad" });
+        				nextComposer.age(),
+        				nextComposer.knownComposer() });
         	}
         	writer.close();
         } catch(IOException e) {
