@@ -76,7 +76,7 @@ public class ComposerDatesQuiz extends JFrame {
 	    		} else {
 	    			resultField.setText(birthyear + " - " + deathyear);
 	    		}
-	    		composerNamePrompt.setText(currentComposer.familiarName());
+	    		composerNamePrompt.setText(currentComposer.forenameFirstFullName());
 	    		panel1NextButton.requestFocusInWindow();
 	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel1NextButton);
 	    	}
@@ -244,7 +244,7 @@ public class ComposerDatesQuiz extends JFrame {
 		if ( quizzingForenames ) {
 			composerNamePrompt.setText("? " + currentComposer.lastName());
 		} else {
-			composerNamePrompt.setText(currentComposer.familiarName());
+			composerNamePrompt.setText(currentComposer.forenameFirstFullName());
 		}
 		birthyear = currentComposer.birthyear();
 		deathyear = currentComposer.deathyear();

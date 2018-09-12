@@ -15,12 +15,12 @@ public class Composer {
 //		familiarNamewWords.remove(familiarNamewWords.size() - 1);
 //		_foreNames = String.join(" ", familiarNamewWords);
 	}
-	protected Composer(String familyNameFirstFullName, String forenameFirstFullName, String birthYear, String deathYear) {
+	protected Composer(String familyNameFirstFullName, String forenameFirstFullName, String birthYear, String deathYear, String age) {
 		_familyNameFirstFullName = familyNameFirstFullName;
 		_forenameFirstFullName = forenameFirstFullName;
-		_familyNameFirstFullName = 
 		_birthYear = birthYear;
 		_deathYear = deathYear;
+		_age = age;
 		this.extractAndSetNameComponents(forenameFirstFullName);
 	}
 	private void extractAndSetNameComponents(String forenameFirstFullName) {
@@ -31,7 +31,8 @@ public class Composer {
 
 	}
 	
-	protected String familiarName() { return _forenameFirstFullName; }
+	protected String forenameFirstFullName() { return _forenameFirstFullName; }
+	protected String familyNameFirstFullName() { return _familyNameFirstFullName; }
 	protected String foreNames() { return _foreNames; }
 	protected String lastName() { return _lastName; }
 	protected String birthyear() { return _birthYear; }
@@ -43,4 +44,5 @@ public class Composer {
 	private String _lastName;
 	private String _birthYear;
 	private String _deathYear;
+	private String _age;
 }

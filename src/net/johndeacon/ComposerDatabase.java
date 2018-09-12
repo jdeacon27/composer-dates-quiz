@@ -2,13 +2,16 @@ package net.johndeacon;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import com.opencsv.CSVWriter;
 
 public class ComposerDatabase {
 	protected ComposerDatabase() {
@@ -17,7 +20,12 @@ public class ComposerDatabase {
 			CSVReader reader = new CSVReaderBuilder(new FileReader("composers.csv")).withSkipLines(1).build();
 			while ( (nextRecord = reader.readNext()) != null ) {
 				int birthYear, deathYear;
-				allComposers.add(new Composer(nextRecord[foreNameFirstField], nextRecord[birthYearField], nextRecord[deathYearField]));
+				allComposers.add(new Composer(
+						nextRecord[familyNameFirstField],
+						nextRecord[foreNameFirstField],
+						nextRecord[birthYearField],
+						nextRecord[deathYearField],
+						nextRecord[ageField]));
 				if ( nextRecord[knownComposerField].length() != 0 ) {
 					knownComposerIndices.add(allComposers.size()-1);	// size is 1 greater than the index of the last element
 					
@@ -42,6 +50,7 @@ public class ComposerDatabase {
 		} catch(IOException e) {
 			System.out.println("File not found");
 		}
+		this.writeToCSVFile();
 	}
 	
 	protected int totalComposerEntries() { return allComposers.size(); }
@@ -60,9 +69,28 @@ public class ComposerDatabase {
 		return knownYearsIndexed.get(index);
 	}
 	
+	protected boolean writeToCSVFile() {
+        try {
+        	CSVWriter writer = new CSVWriter(Files.newBufferedWriter(Paths.get("./composer.new.csv")));
+        	String[] headerLine = {"Family Name First", "Forename First", "Birth Date", "Death Date", "Age", "Memorized"};
+        	writer.writeNext(headerLine);
+        	for (Composer nextComposer : allComposers) {
+        		writer.writeNext(new String[] { nextComposer.familyNameFirstFullName(),
+        				nextComposer.forenameFirstFullName(),
+        				nextComposer.birthyear(),
+        				nextComposer.deathyear(),
+        				"Pad", "Pad" });
+        	}
+        	writer.close();
+        } catch(IOException e) {
+        	e.printStackTrace();
+        }
+		return true;
+	}
+	
 	private List<Composer> allComposers= new ArrayList<>();
 	private List<Integer> knownComposerIndices = new ArrayList<>();
-	private Map<Integer,Yearful> knownYears = new HashMap<>();		// "indexed" by CE year, e.g. 1756
+	private Map<Integer,Yearful> knownYears = new LinkedHashMap<>();		// "indexed" by CE year, e.g. 1756
 	private List<Yearful> knownYearsIndexed;						// indexed by index number: 0, 1, 2, ...
 	
 	// Current layout of CSV file follows
