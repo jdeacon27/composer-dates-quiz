@@ -1,7 +1,9 @@
 package net.johndeacon;
 
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -17,7 +19,7 @@ public class ComposerDatabase {
 	protected ComposerDatabase() {
 		try {
 			String[] nextRecord;
-			CSVReader reader = new CSVReaderBuilder(new FileReader("composers.csv")).withSkipLines(1).build();
+			CSVReader reader = new CSVReaderBuilder(new InputStreamReader( new FileInputStream("composers.csv"),"UTF-8") ).withSkipLines(1).build();
 			while ( (nextRecord = reader.readNext()) != null ) {
 				int birthYear, deathYear;
 				allComposers.add(new Composer(
@@ -72,7 +74,7 @@ public class ComposerDatabase {
 	
 	protected boolean writeToCSVFile() {
         try {
-        	CSVWriter writer = new CSVWriter(Files.newBufferedWriter(Paths.get("./composer.new.csv")));
+        	CSVWriter writer = new CSVWriter(Files.newBufferedWriter(Paths.get("./composers.new.csv")));
         	String[] headerLine = {"Family Name First", "Forename First", "Birth Date", "Death Date", "Age", "Memorized"};
         	writer.writeNext(headerLine);
         	for (Composer nextComposer : allComposers) {
