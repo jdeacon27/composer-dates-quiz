@@ -43,11 +43,11 @@ public class Chooser {
 		shuffledComposerIndices.remove(shuffledIndicesIndex);
 		return _database.anyComposer(composerIndex);
 	}
-	protected Year randomYear() {
+	protected Yearful randomYear() {
 		int year = rng.nextInt(_database.totalYearsKnown());
 		return _database.yearByIndex(year);
 	}
-	protected Year nextShuffledYear() {
+	protected Yearful nextShuffledYear() {
 		if ( shuffledKnownYearIndices.size() == 0 ) {
 			for ( int index = 0; index < _totalKnownYearEntries; index++ ) {
 				shuffledKnownYearIndices.add(index); 

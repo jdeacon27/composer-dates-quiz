@@ -251,7 +251,7 @@ public class ComposerDatesQuiz extends JFrame {
 		return;
 	}
 	protected void poseYearQuestion() {
-		Year inQuestion = sessionChooser.nextShuffledYear();
+		Yearful inQuestion = sessionChooser.nextShuffledYear();
 		currentYear = inQuestion.yearAsStringCE();
 		eventsThisYear = inQuestion.events();
 		datePrompt.setText(currentYear);
