@@ -62,14 +62,14 @@ public class ComposerDatabase {
 	
 	private List<Composer> allComposers= new ArrayList<>();
 	private List<Integer> knownComposerIndices = new ArrayList<>();
-	private Map<Integer,Yearful> knownYears = new HashMap<>();
-	private List<Yearful> knownYearsIndexed;
+	private Map<Integer,Yearful> knownYears = new HashMap<>();		// "indexed" by CE year, e.g. 1756
+	private List<Yearful> knownYearsIndexed;						// indexed by index number: 0, 1, 2, ...
 	
 	// Current layout of CSV file follows
-	//private int familyNameFirstField = 0;
+	private int familyNameFirstField = 0;
 	private int foreNameFirstField = 1;
 	private int birthYearField = 2;
 	private int deathYearField = 3;
-	//private int ageField = 4;			// Currently, in the database file this is just a subtraction so can be a year out
+	private int ageField = 4;			// Currently, in the database file this is just a subtraction so can be a year out
 	private int knownComposerField = 5;
 }
