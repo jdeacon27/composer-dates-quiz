@@ -62,7 +62,7 @@ public class ComposerDatesQuiz extends JFrame {
 	    JLabel resultField = new JLabel();
 	    resultField.setBounds(50, 150, 280, 30);
 		resultField.setOpaque(true);
-		resultField.setBackground(Color.WHITE);
+//		resultField.setBackground(Color.WHITE);
 		lifetimePanel.add(resultField);
 
 	    /*JButton*/ panel1SubmitButton.setText("Respond");
@@ -187,7 +187,7 @@ public class ComposerDatesQuiz extends JFrame {
 	}
 
 	
-// Inner or instance classes follow. An instance of such a class will be contained within each instance of the containing class. They have access to the outer instance's members.
+// Inner (instance) classes follow. An instance of such a class will be contained within each instance of the containing class. They have access to the outer instance's members.
 
 	class RadioButtonActionListener implements ActionListener {
 	    @Override

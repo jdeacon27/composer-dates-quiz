@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import com.opencsv.CSVReader;
@@ -16,19 +18,31 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
 
 public class ComposerDatabase {
+	/* Reads a CSV file and creates a database of composer information. It holds composers both
+	 * by position (for repeatable random access) and by normalized, forename first, composer name.
+	 * The positional information is available over all the composers in the database or over just
+	 * those that were marked as known (or memorized).
+	 * The database can also be asked for lists of birth and death events by year (CE).
+	 */
 	protected ComposerDatabase() {
 		try {
 			String[] nextRecord;
 			CSVReader reader = new CSVReaderBuilder(new InputStreamReader( new FileInputStream("composers.csv"),"UTF-8") ).withSkipLines(1).build();
 			while ( (nextRecord = reader.readNext()) != null ) {
 				int birthYear, deathYear;
-				allComposers.add(new Composer(
+				Composer nextComposer;
+				nextComposer = new Composer(
 						nextRecord[familyNameFirstField],
 						nextRecord[foreNameFirstField],
 						nextRecord[birthYearField],
 						nextRecord[deathYearField],
 						nextRecord[ageField],
-						nextRecord[knownComposerField]));
+						nextRecord[knownComposerField]);
+				allComposers.add(nextComposer);
+				String accentlessComposerName;
+				accentlessComposerName = Normalizer.normalize(nextRecord[foreNameFirstField], Normalizer.Form.NFD);
+				accentlessComposerName = accentlessComposerName.replaceAll("\\p{M}", "");
+				composers.put(accentlessComposerName, nextComposer);
 				if ( nextRecord[knownComposerField].length() != 0 ) {
 					knownComposerIndices.add(allComposers.size()-1);	// size is 1 greater than the index of the last element
 					
@@ -92,8 +106,9 @@ public class ComposerDatabase {
 		return true;
 	}
 	
-	private List<Composer> allComposers= new ArrayList<>();
+	private List<Composer> allComposers = new ArrayList<>();
 	private List<Integer> knownComposerIndices = new ArrayList<>();
+	private Map<String,Composer> composers = new HashMap<>();
 	private Map<Integer,Yearful> knownYears = new LinkedHashMap<>();		// "indexed" by CE year, e.g. 1756
 	private List<Yearful> knownYearsIndexed;						// indexed by index number: 0, 1, 2, ...
 	
