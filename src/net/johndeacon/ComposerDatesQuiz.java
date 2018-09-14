@@ -197,9 +197,10 @@ public class ComposerDatesQuiz extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String sought = composerNameFragmentPrompt.getText();
 				List<String> matches = composerDatabase.composersThatMatch(sought);
-				composerNameFragmentPrompt.setText(composerDatabase.composer(matches.get(0)).forenameFirstFullName());
-				System.out.println(composerDatabase.composersThatMatch(sought));
-				System.out.println();
+				currentComposer = composerDatabase.composer(matches.get(0));
+				ComposerDatesQuiz.this.updateEditPanel();
+//				System.out.println(composerDatabase.composersThatMatch(sought));
+//				System.out.println();
 //				poseYearQuestion();
 //				panel2SubmitButton.requestFocusInWindow();
 //				ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel2SubmitButton);
@@ -283,11 +284,7 @@ public class ComposerDatesQuiz extends JFrame {
 				p2SubmitButton.getRootPane().setDefaultButton(p2SubmitButton);
 	        } else {
 	    		if ( currentComposer != null ) {
-	    			p3composerNameField.setText(currentComposer.forenameFirstFullName());
-	    	    	p3birthField.setText(currentComposer.birthyear());
-	    		    p3deathField.setText(currentComposer.deathyear());
-	    		    p3familyNameFirstField.setText(currentComposer.familyNameFirstFullName());
-	    		    p3knownComposer.setSelected(currentComposer.knownComposer().length() != 0);
+	    			ComposerDatesQuiz.this.updateEditPanel();
 	    		}
 	        }
 	    }
@@ -328,6 +325,13 @@ public class ComposerDatesQuiz extends JFrame {
 		currentYear = inQuestion.yearAsStringCE();
 		eventsThisYear = inQuestion.events();
 		datePrompt.setText(currentYear);
+	}
+	protected void updateEditPanel() {
+		p3composerNameField.setText(currentComposer.forenameFirstFullName());
+    	p3birthField.setText(currentComposer.birthyear());
+	    p3deathField.setText(currentComposer.deathyear());
+	    p3familyNameFirstField.setText(currentComposer.familyNameFirstFullName());
+	    p3knownComposer.setSelected(currentComposer.knownComposer().length() != 0);
 	}
 	
 	private ComposerDatabase composerDatabase = new ComposerDatabase();
