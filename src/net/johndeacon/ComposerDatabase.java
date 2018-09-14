@@ -1,14 +1,15 @@
 package net.johndeacon;
 
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.Normalizer;
+import java.util.Set;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -40,7 +41,7 @@ public class ComposerDatabase {
 						nextRecord[knownComposerField]);
 				allComposers.add(nextComposer);
 				String accentlessComposerName;
-				accentlessComposerName = Normalizer.normalize(nextRecord[foreNameFirstField], Normalizer.Form.NFD);
+				accentlessComposerName = Normalizer.normalize(nextRecord[foreNameFirstField], Normalizer.Form.NFD).toLowerCase();
 				accentlessComposerName = accentlessComposerName.replaceAll("\\p{M}", "");
 				composers.put(accentlessComposerName, nextComposer);
 				if ( nextRecord[knownComposerField].length() != 0 ) {
@@ -73,11 +74,22 @@ public class ComposerDatabase {
 	protected int totalComposerEntries() { return allComposers.size(); }
 	protected int totalKnownComposerEntries() { return knownComposerIndices.size(); }
 	protected int totalYearsKnown() { return knownYears.size(); }
+	protected Composer composer(String familiarName) {
+		return composers.get(familiarName);
+	}
 	protected Composer knownComposer(int index) {
 		return allComposers.get(knownComposerIndices.get(index));
 	}
 	protected Composer anyComposer(int index) {
 		return allComposers.get(index);
+	}
+	protected List<String> composersThatMatch(String frag) {
+		final String accentlessComposerName = Normalizer.normalize(frag, Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
+		List<String> matches = composers.keySet()
+										.stream()
+										.filter(s -> s.contains(accentlessComposerName))
+										.collect(Collectors.toList());
+		return matches;
 	}
 	protected List<String> eventsInYear(int thisYear) {
 		return knownYears.get(thisYear).events();

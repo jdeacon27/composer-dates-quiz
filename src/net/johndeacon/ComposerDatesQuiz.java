@@ -10,6 +10,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
@@ -37,10 +38,13 @@ public class ComposerDatesQuiz extends JFrame {
 		lifetimePanel.setLayout(null);
 		JPanel inThisYearPanel = new JPanel();
 		inThisYearPanel.setLayout(null);
+		JPanel editPanel = new JPanel();
+		editPanel.setLayout(null);
 		
 		this.add(tabbedPane);
 		tabbedPane.add("Lifetimes", lifetimePanel);
 		tabbedPane.add("In this year", inThisYearPanel);
+		tabbedPane.add("Edit", editPanel);
 		tabbedPane.addChangeListener(new TabbedPaneSelection());
 
 // Panel 1, the lifetime panel
@@ -49,15 +53,15 @@ public class ComposerDatesQuiz extends JFrame {
 		composerNamePrompt.setBackground(Color.WHITE);
 		lifetimePanel.add(composerNamePrompt);
 	    
-	    /*JTextField*/ birthAnswerField.setBounds(50, 90, 80, 30);
-	    lifetimePanel.add(birthAnswerField);
+	    /*JTextField*/ p1birthAnswerField.setBounds(50, 90, 80, 30);
+	    lifetimePanel.add(p1birthAnswerField);
 
-	    JLabel datesHyphen = new JLabel("-");
-	    datesHyphen.setBounds(150, 90, 20, 30);
-	    lifetimePanel.add(datesHyphen);
+	    JLabel p1datesHyphen = new JLabel("-");
+	    p1datesHyphen.setBounds(150, 90, 20, 30);
+	    lifetimePanel.add(p1datesHyphen);
 
-	    /*JTextField*/ deathAnswerField.setBounds(180, 90, 80, 30);
-	    lifetimePanel.add(deathAnswerField);
+	    /*JTextField*/ p1deathAnswerField.setBounds(180, 90, 80, 30);
+	    lifetimePanel.add(p1deathAnswerField);
 
 	    JLabel resultField = new JLabel();
 	    resultField.setBounds(50, 150, 280, 30);
@@ -65,37 +69,37 @@ public class ComposerDatesQuiz extends JFrame {
 //		resultField.setBackground(Color.WHITE);
 		lifetimePanel.add(resultField);
 
-	    /*JButton*/ panel1SubmitButton.setText("Respond");
-		panel1SubmitButton.setBounds(50, 200, 100, 40);
-	    panel1SubmitButton.addActionListener(new ActionListener() {
+	    /*JButton*/ p1SubmitButton.setText("Respond");
+		p1SubmitButton.setBounds(50, 200, 100, 40);
+	    p1SubmitButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		String birthAnswer = birthAnswerField.getText();
-	    		String deathAnswer = deathAnswerField.getText();
+	    		String birthAnswer = p1birthAnswerField.getText();
+	    		String deathAnswer = p1deathAnswerField.getText();
 	    		if ( birthAnswer.equals(birthyear) && deathAnswer.equals(deathyear) ) {
 	    			resultField.setText("Correct");
 	    		} else {
 	    			resultField.setText(birthyear + " - " + deathyear);
 	    		}
 	    		composerNamePrompt.setText(currentComposer.forenameFirstFullName());
-	    		panel1NextButton.requestFocusInWindow();
-	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel1NextButton);
+	    		p1NextButton.requestFocusInWindow();
+	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(p1NextButton);
 	    	}
 	    });  		          
-	    lifetimePanel.add(panel1SubmitButton);
+	    lifetimePanel.add(p1SubmitButton);
 		
-		/*JButton*/ panel1NextButton.setText("Next");
-	    panel1NextButton.setBounds(50, 290, 100, 40);
-		panel1NextButton.addActionListener(new ActionListener() {
+		/*JButton*/ p1NextButton.setText("Next");
+	    p1NextButton.setBounds(50, 290, 100, 40);
+		p1NextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				birthAnswerField.setText("");
-				deathAnswerField.setText("");
+				p1birthAnswerField.setText("");
+				p1deathAnswerField.setText("");
 				resultField.setText("");
 				poseComposerQuestion();
-				birthAnswerField.requestFocusInWindow();
-				ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel1SubmitButton);
+				p1birthAnswerField.requestFocusInWindow();
+				ComposerDatesQuiz.this.getRootPane().setDefaultButton(p1SubmitButton);
 			}
 		});
-		lifetimePanel.add(panel1NextButton);
+		lifetimePanel.add(p1NextButton);
 		
 		/*JRadioButton*/ knownComposers.setText("Known Composers"); 
 		knownComposers.setBounds(170, 280, 140, 30);
@@ -127,10 +131,10 @@ public class ComposerDatesQuiz extends JFrame {
 		lifetimePanel.add(numbersInfo);
 
 		List<Component> order = new ArrayList<Component>();
-        order.add(birthAnswerField);
-        order.add(deathAnswerField);
-        order.add(panel1SubmitButton);
-        order.add(panel1NextButton);
+        order.add(p1birthAnswerField);
+        order.add(p1deathAnswerField);
+        order.add(p1SubmitButton);
+        order.add(p1NextButton);
         lifetimePanel.setFocusTraversalPolicyProvider(true);
         lifetimePanel.setFocusTraversalPolicy(new QuizFocusTraversalPolicy(order));
 		
@@ -147,29 +151,29 @@ public class ComposerDatesQuiz extends JFrame {
 		//datePrompt.setOpaque(true);
 		inThisYearPanel.add(datePrompt);
 
-	    /*JButton*/ panel2SubmitButton.setText("Reveal");
-	    panel2SubmitButton.setBounds(50, 80, 100, 40);
-	    panel2SubmitButton.addActionListener(new ActionListener() {
+	    /*JButton*/ p2SubmitButton.setText("Reveal");
+	    p2SubmitButton.setBounds(50, 80, 100, 40);
+	    p2SubmitButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String inThisYearAnswerText = String.join("\n", eventsThisYear);
 	    		onThisDayAnswer.setText(inThisYearAnswerText);
-	    		panel2NextButton.requestFocusInWindow();
-	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel2NextButton);
+	    		p2NextButton.requestFocusInWindow();
+	    		ComposerDatesQuiz.this.getRootPane().setDefaultButton(p2NextButton);
 	    	}
 	    });  		          
-	    inThisYearPanel.add(panel2SubmitButton);
+	    inThisYearPanel.add(p2SubmitButton);
 
-	    /*JButton*/ panel2NextButton.setText("Next");
-	    panel2NextButton.setBounds(200, 80, 100, 40);
-		panel2NextButton.addActionListener(new ActionListener() {
+	    /*JButton*/ p2NextButton.setText("Next");
+	    p2NextButton.setBounds(200, 80, 100, 40);
+		p2NextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				onThisDayAnswer.setText("");
 				poseYearQuestion();
-				panel2SubmitButton.requestFocusInWindow();
-				ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel2SubmitButton);
+				p2SubmitButton.requestFocusInWindow();
+				ComposerDatesQuiz.this.getRootPane().setDefaultButton(p2SubmitButton);
 			}
 		});
-		inThisYearPanel.add(panel2NextButton);
+		inThisYearPanel.add(p2NextButton);
 
 		/*JTextArea*/ onThisDayAnswer = new JTextArea();
 		JScrollPane scrollPane = new JScrollPane(onThisDayAnswer);
@@ -177,10 +181,52 @@ public class ComposerDatesQuiz extends JFrame {
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		inThisYearPanel.add(scrollPane);
 		onThisDayAnswer.setText("");
+		
+// Panel 3, the edit panel
+		JLabel fieldLabel01 = new JLabel("Name (or fragment of name)");
+		fieldLabel01.setBounds(50, 00, 290, 30);
+		editPanel.add(fieldLabel01);
+
+		// Use spin buttons and print the number of matches between the buttons
+		// Update the composer on field events; and only have a button for Write Database?
+		/*JTextField*/ composerNameFragmentPrompt.setBounds(50, 30, 290, 30);
+		composerNameFragmentPrompt.setOpaque(true);
+		composerNameFragmentPrompt.setBackground(Color.WHITE);
+		composerNameFragmentPrompt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String sought = composerNameFragmentPrompt.getText();
+				List<String> matches = composerDatabase.composersThatMatch(sought);
+				composerNameFragmentPrompt.setText(composerDatabase.composer(matches.get(0)).forenameFirstFullName());
+				System.out.println(composerDatabase.composersThatMatch(sought));
+				System.out.println();
+//				poseYearQuestion();
+//				panel2SubmitButton.requestFocusInWindow();
+//				ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel2SubmitButton);
+			}
+		});
+		editPanel.add(composerNameFragmentPrompt);
+		
+		// Populate the composer fields with the current composer per Panel 1
+		/*JLabel*/ p3composerNameField.setBounds(50, 30, 290, 30);		// x axis, y axis, width, height
+		p3composerNameField.setOpaque(true);
+		p3composerNameField.setBackground(Color.WHITE);
+		lifetimePanel.add(p3composerNameField);
+	    
+	    /*JTextField*/ p3birthAnswerField.setBounds(50, 90, 80, 30);
+	    lifetimePanel.add(p3birthAnswerField);
+
+	    JLabel p3datesHyphen = new JLabel("-");
+	    p3datesHyphen.setBounds(150, 90, 20, 30);
+	    lifetimePanel.add(p3datesHyphen);
+
+	    /*JTextField*/ p3deathAnswerField.setBounds(180, 90, 80, 30);
+	    lifetimePanel.add(p3deathAnswerField);
+
+
 
 // Finish off the JFrame
 		this.setSize(400,500);		// width, height
-		lifetimePanel.getRootPane().setDefaultButton(panel1SubmitButton);
+		lifetimePanel.getRootPane().setDefaultButton(p1SubmitButton);
         this.setLocationByPlatform(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -209,11 +255,11 @@ public class ComposerDatesQuiz extends JFrame {
 	        JTabbedPane tabbedPane = (JTabbedPane) event.getSource();
 	        int selectedIndex = tabbedPane.getSelectedIndex();
 	        if ( selectedIndex == 0 ) {
-				panel1NextButton.requestFocusInWindow();
-				panel1NextButton.getRootPane().setDefaultButton(panel1NextButton);
+				p1NextButton.requestFocusInWindow();
+				p1NextButton.getRootPane().setDefaultButton(p1NextButton);
 	        } else {
-				panel2SubmitButton.requestFocusInWindow();
-				panel2SubmitButton.getRootPane().setDefaultButton(panel2SubmitButton);
+				p2SubmitButton.requestFocusInWindow();
+				p2SubmitButton.getRootPane().setDefaultButton(p2SubmitButton);
 	        }
 	    }
 
@@ -227,8 +273,8 @@ public class ComposerDatesQuiz extends JFrame {
 				ComposerDatesQuiz quiz = new ComposerDatesQuiz();
 				quiz.setVisible(true);
 				quiz.poseYearQuestion();
-				quiz.panel1NextButton.requestFocusInWindow();
-				quiz.panel1NextButton.getRootPane().setDefaultButton(quiz.panel1NextButton);
+				quiz.p1NextButton.requestFocusInWindow();
+				quiz.p1NextButton.getRootPane().setDefaultButton(quiz.p1NextButton);
 				// This is asymmetric. One panel does these defaults here and the other elsewhere.
 			}
 		});
@@ -268,18 +314,24 @@ public class ComposerDatesQuiz extends JFrame {
 	private List<String> eventsThisYear;
 	
     private JLabel composerNamePrompt = new JLabel();
-    private JTextField birthAnswerField = new JTextField();
-    private JTextField deathAnswerField = new JTextField();
-    private JButton panel1SubmitButton = new JButton();
-    private JButton panel1NextButton = new JButton();
+    private JTextField p1birthAnswerField = new JTextField();
+    private JTextField p1deathAnswerField = new JTextField();
+    private JButton p1SubmitButton = new JButton();
+    private JButton p1NextButton = new JButton();
 	private JRadioButton knownComposers = new JRadioButton();
 	private JRadioButton allComposers = new JRadioButton();
 	private JLabel numbersInfo;
 
 	private JLabel datePrompt = new JLabel("");
-	private JButton panel2SubmitButton = new JButton();
-    private JButton panel2NextButton = new JButton();
-    private JTextArea onThisDayAnswer = new JTextArea(); 
+	private JButton p2SubmitButton = new JButton();
+    private JButton p2NextButton = new JButton();
+    private JTextArea onThisDayAnswer = new JTextArea();
+    
+    private JTextField composerNameFragmentPrompt = new JTextField();
+    private JLabel p3composerNameField = new JLabel();
+    private JTextField p3birthAnswerField = new JTextField();
+    private JTextField p3deathAnswerField = new JTextField();
+
 	
 	private String explanationText = "You're not expected to write anything,\njust think about the answer and press Enter.";
 	private static final long serialVersionUID = 6312869237473479611L;
