@@ -56,12 +56,11 @@ public class ComposerDatabase {
 					knownYearEntry = knownYears.getOrDefault(deathYear, new Yearful(deathYear, new ArrayList<String>()));
 					knownYearEntry.addEvent(nextRecord[foreNameFirstField] + " died");
 					knownYears.put(deathYear, knownYearEntry);
-					
-					/* While building, a map is convenient; but from then on access is (currently)
-					   only by (random) position, so now we'll build an ArrayList from the entries.
-					*/
-					knownYearsIndexed = new ArrayList<Yearful>(knownYears.values());
 				}
+				/* While building, a map is convenient; but from then on access is (currently)
+				   only by (random) position, so now we'll build an ArrayList from the entries.
+				*/
+				knownYearsIndexed = new ArrayList<Yearful>(knownYears.values());
 			}
 			reader.close();
 		} catch(IOException e) {
@@ -82,8 +81,11 @@ public class ComposerDatabase {
 	protected Composer anyComposer(int index) {
 		return allComposers.get(index);
 	}
+	protected String normalize(String withAccentsAndMixedCase) {
+		return Normalizer.normalize(withAccentsAndMixedCase, Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
+	}
 	protected List<String> composersThatMatch(String frag) {
-		final String accentlessComposerName = Normalizer.normalize(frag, Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
+		final String accentlessComposerName = this.normalize(frag);
 		List<String> matches = composers.keySet()
 										.stream()
 										.filter(s -> s.contains(accentlessComposerName))
@@ -96,7 +98,21 @@ public class ComposerDatabase {
 	protected Yearful yearByIndex(int index) {
 		return knownYearsIndexed.get(index);
 	}
-	
+	protected void updateName(Composer updatee, String update) {
+		// composers are held two ways: by position, which won't be impacted; and by the name being updated, so ...
+		System.out.println("Before updating there are " + composers.size() + " composers indexed by normalized name");
+		composers.remove(this.normalize(updatee.forenameFirstFullName()));			// remove via current name
+		updatee.forenameFirstFullName(update);						// update name
+		composers.put(this.normalize(updatee.forenameFirstFullName()), updatee);	// add back via updated name
+		System.out.println("After updating there are " + composers.size() + " composers indexed by normalized name");
+		diskFileOutOfSync = true;
+		return;
+	}
+	protected void updateKnownComposer(Composer updatee, String flag) {
+		updatee.knownComposer(flag);
+		// have to add the known composer to the known composer index
+		diskFileOutOfSync = true;
+	}
 	protected boolean writeToCSVFile() {
         try {
         	CSVWriter writer = new CSVWriter(Files.newBufferedWriter(Paths.get("./composers.new.csv")));
@@ -120,9 +136,9 @@ public class ComposerDatabase {
 	private List<Composer> allComposers = new ArrayList<>();
 	private List<Integer> knownComposerIndices = new ArrayList<>();
 	private Map<String,Composer> composers = new HashMap<>();
-	private Map<Integer,Yearful> knownYears = new LinkedHashMap<>();		// "indexed" by CE year, e.g. 1756
-	private List<Yearful> knownYearsIndexed;						// indexed by index number: 0, 1, 2, ...
-	
+	private Map<Integer,Yearful> knownYears = new LinkedHashMap<>();		// Yearfuls "indexed" by CE year, e.g. 1756
+	private List<Yearful> knownYearsIndexed;								// Yearfuls indexed by index number: 0, 1, 2, ...
+	private boolean diskFileOutOfSync;
 	// Current layout of CSV file follows
 	private int familyNameFirstField = 0;
 	private int foreNameFirstField = 1;

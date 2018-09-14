@@ -197,13 +197,9 @@ public class ComposerDatesQuiz extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String sought = composerNameFragmentPrompt.getText();
 				List<String> matches = composerDatabase.composersThatMatch(sought);
+				// Need to check that there was at least one match
 				currentComposer = composerDatabase.composer(matches.get(0));
 				ComposerDatesQuiz.this.updateEditPanel();
-//				System.out.println(composerDatabase.composersThatMatch(sought));
-//				System.out.println();
-//				poseYearQuestion();
-//				panel2SubmitButton.requestFocusInWindow();
-//				ComposerDatesQuiz.this.getRootPane().setDefaultButton(panel2SubmitButton);
 			}
 		});
 		editPanel.add(composerNameFragmentPrompt);
@@ -212,10 +208,14 @@ public class ComposerDatesQuiz extends JFrame {
 		p3separator.setBounds(5, 75, 365, 30);
 		editPanel.add(p3separator);
 	    
-		// Populate the composer fields with the current composer per Panel 1
-		/*JTextField*/ p3composerNameField.setBounds(50, 90, 290, 30);		// x axis, y axis, width, height
+		/*JTextField*/ p3composerNameField.setBounds(50, 90, 290, 30);
 //		p3composerNameField.setOpaque(true);
 //		p3composerNameField.setBackground(Color.WHITE);
+		p3composerNameField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				composerDatabase.updateName(currentComposer, p3composerNameField.getText());
+			}
+		});
 		editPanel.add(p3composerNameField);
 		
 	    /*JLabel*/ p3birthField.setBounds(50, 150, 80, 30);
@@ -233,13 +233,15 @@ public class ComposerDatesQuiz extends JFrame {
 		editPanel.add(p3deathField);
 
 		/*JCheckBox*/ p3knownComposer.setBounds(50, 210, 130, 30);
-//		forenames.addItemListener(new ItemListener() {
-//			public void itemStateChanged(ItemEvent e) {
-//				if ( e.getStateChange() == ItemEvent.SELECTED ) {
-//					quizzingForenames = true;
-//				}
-//			}
-//		});
+		p3knownComposer.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if ( e.getStateChange() == ItemEvent.SELECTED ) {
+					composerDatabase.updateKnownComposer(currentComposer, "Y");
+				} else {
+					composerDatabase.updateKnownComposer(currentComposer, "");
+				}
+			}
+		});
 		editPanel.add(p3knownComposer);
 
 		/*JLabel*/ p3familyNameFirstField.setBounds(50, 270, 390, 30);

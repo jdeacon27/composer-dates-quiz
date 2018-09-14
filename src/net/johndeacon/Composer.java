@@ -28,6 +28,13 @@ public class Composer {
 
 	}
 	
+	protected void forenameFirstFullName(String name) {
+		_forenameFirstFullName = name;
+	}
+	protected void knownComposer(String flag) {
+		_knownComposer = flag;		// flag is any character, usually "Y"; "" signifies unknown; historical quirk
+	}
+	
 	protected String forenameFirstFullName() { return _forenameFirstFullName; }
 	protected String familyNameFirstFullName() { return _familyNameFirstFullName; }
 	protected String foreNames() { return _foreNames; }
