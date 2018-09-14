@@ -10,11 +10,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
@@ -75,10 +76,10 @@ public class ComposerDatesQuiz extends JFrame {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String birthAnswer = p1birthAnswerField.getText();
 	    		String deathAnswer = p1deathAnswerField.getText();
-	    		if ( birthAnswer.equals(birthyear) && deathAnswer.equals(deathyear) ) {
+	    		if ( birthAnswer.equals(currentComposer.birthyear()) && deathAnswer.equals(currentComposer.deathyear()) ) {
 	    			resultField.setText("Correct");
 	    		} else {
-	    			resultField.setText(birthyear + " - " + deathyear);
+	    			resultField.setText(currentComposer.birthyear() + " - " + currentComposer.deathyear());
 	    		}
 	    		composerNamePrompt.setText(currentComposer.forenameFirstFullName());
 	    		p1NextButton.requestFocusInWindow();
@@ -206,22 +207,42 @@ public class ComposerDatesQuiz extends JFrame {
 		});
 		editPanel.add(composerNameFragmentPrompt);
 		
-		// Populate the composer fields with the current composer per Panel 1
-		/*JLabel*/ p3composerNameField.setBounds(50, 30, 290, 30);		// x axis, y axis, width, height
-		p3composerNameField.setOpaque(true);
-		p3composerNameField.setBackground(Color.WHITE);
-		lifetimePanel.add(p3composerNameField);
+		JSeparator p3separator = new JSeparator(SwingConstants.HORIZONTAL);
+		p3separator.setBounds(5, 75, 365, 30);
+		editPanel.add(p3separator);
 	    
-	    /*JTextField*/ p3birthAnswerField.setBounds(50, 90, 80, 30);
-	    lifetimePanel.add(p3birthAnswerField);
+		// Populate the composer fields with the current composer per Panel 1
+		/*JTextField*/ p3composerNameField.setBounds(50, 90, 290, 30);		// x axis, y axis, width, height
+//		p3composerNameField.setOpaque(true);
+//		p3composerNameField.setBackground(Color.WHITE);
+		editPanel.add(p3composerNameField);
+		
+	    /*JLabel*/ p3birthField.setBounds(50, 150, 80, 30);
+		p3birthField.setOpaque(true);
+		p3birthField.setBackground(Color.WHITE);
+	    editPanel.add(p3birthField);
 
 	    JLabel p3datesHyphen = new JLabel("-");
-	    p3datesHyphen.setBounds(150, 90, 20, 30);
-	    lifetimePanel.add(p3datesHyphen);
+	    p3datesHyphen.setBounds(150, 150, 20, 30);
+	    editPanel.add(p3datesHyphen);
 
-	    /*JTextField*/ p3deathAnswerField.setBounds(180, 90, 80, 30);
-	    lifetimePanel.add(p3deathAnswerField);
+	    /*JLabel*/ p3deathField.setBounds(180, 150, 80, 30);
+		p3deathField.setOpaque(true);
+		p3deathField.setBackground(Color.WHITE);
+		editPanel.add(p3deathField);
 
+		/*JCheckBox*/ p3knownComposer.setBounds(50, 210, 130, 30);
+//		forenames.addItemListener(new ItemListener() {
+//			public void itemStateChanged(ItemEvent e) {
+//				if ( e.getStateChange() == ItemEvent.SELECTED ) {
+//					quizzingForenames = true;
+//				}
+//			}
+//		});
+		editPanel.add(p3knownComposer);
+
+		/*JLabel*/ p3familyNameFirstField.setBounds(50, 270, 390, 30);
+		editPanel.add(p3familyNameFirstField);
 
 
 // Finish off the JFrame
@@ -257,9 +278,17 @@ public class ComposerDatesQuiz extends JFrame {
 	        if ( selectedIndex == 0 ) {
 				p1NextButton.requestFocusInWindow();
 				p1NextButton.getRootPane().setDefaultButton(p1NextButton);
-	        } else {
+	        } else if ( selectedIndex == 1 ) {
 				p2SubmitButton.requestFocusInWindow();
 				p2SubmitButton.getRootPane().setDefaultButton(p2SubmitButton);
+	        } else {
+	    		if ( currentComposer != null ) {
+	    			p3composerNameField.setText(currentComposer.forenameFirstFullName());
+	    	    	p3birthField.setText(currentComposer.birthyear());
+	    		    p3deathField.setText(currentComposer.deathyear());
+	    		    p3familyNameFirstField.setText(currentComposer.familyNameFirstFullName());
+	    		    p3knownComposer.setSelected(currentComposer.knownComposer().length() != 0);
+	    		}
 	        }
 	    }
 
@@ -292,8 +321,6 @@ public class ComposerDatesQuiz extends JFrame {
 		} else {
 			composerNamePrompt.setText(currentComposer.forenameFirstFullName());
 		}
-		birthyear = currentComposer.birthyear();
-		deathyear = currentComposer.deathyear();
 		return;
 	}
 	protected void poseYearQuestion() {
@@ -306,8 +333,6 @@ public class ComposerDatesQuiz extends JFrame {
 	private ComposerDatabase composerDatabase = new ComposerDatabase();
 	private Chooser sessionChooser = new Chooser(composerDatabase);
 	private Composer currentComposer;
-	private String birthyear;
-	private String deathyear;
 	private boolean quizzingKnownComposers;
 	private boolean quizzingForenames;
 	private String currentYear;
@@ -328,10 +353,11 @@ public class ComposerDatesQuiz extends JFrame {
     private JTextArea onThisDayAnswer = new JTextArea();
     
     private JTextField composerNameFragmentPrompt = new JTextField();
-    private JLabel p3composerNameField = new JLabel();
-    private JTextField p3birthAnswerField = new JTextField();
-    private JTextField p3deathAnswerField = new JTextField();
-
+    private JTextField p3composerNameField = new JTextField();
+    private JLabel p3birthField = new JLabel();
+    private JLabel p3deathField = new JLabel();
+    private JLabel p3familyNameFirstField = new JLabel();
+    private JCheckBox p3knownComposer = new JCheckBox("Memorized?");
 	
 	private String explanationText = "You're not expected to write anything,\njust think about the answer and press Enter.";
 	private static final long serialVersionUID = 6312869237473479611L;
