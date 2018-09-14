@@ -40,8 +40,7 @@ public class ComposerDatabase {
 						nextRecord[knownComposerField]);
 				allComposers.add(nextComposer);
 				String accentlessComposerName;
-				accentlessComposerName = Normalizer.normalize(nextRecord[foreNameFirstField], Normalizer.Form.NFD).toLowerCase();
-				accentlessComposerName = accentlessComposerName.replaceAll("\\p{M}", "");
+				accentlessComposerName = this.normalize(nextRecord[foreNameFirstField]);
 				composers.put(accentlessComposerName, nextComposer);
 				if ( nextRecord[knownComposerField].length() != 0 ) {
 					knownComposerIndices.add(allComposers.size()-1);	// size is 1 greater than the index of the last element
@@ -82,6 +81,9 @@ public class ComposerDatabase {
 		return allComposers.get(index);
 	}
 	protected String normalize(String withAccentsAndMixedCase) {
+		// The following converts accents to a normalized form where the accents are separated from the characters,
+		// \\p{M} then finds and removes the accents,
+		// and the case is then folded
 		return Normalizer.normalize(withAccentsAndMixedCase, Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
 	}
 	protected List<String> composersThatMatch(String frag) {
