@@ -103,11 +103,9 @@ public class ComposerDatabase {
 	}
 	protected void updateName(Composer updatee, String update) {
 		// composers are held two ways: by position, which won't be impacted; and by the name being updated, so ...
-		System.out.println("Before updating there are " + composers.size() + " composers indexed by normalized name");
 		composers.remove(this.normalize(updatee.forenameFirstFullName()));			// remove via current name
 		updatee.forenameFirstFullName(update);						// update name
 		composers.put(this.normalize(updatee.forenameFirstFullName()), updatee);	// add back via updated name
-		System.out.println("After updating there are " + composers.size() + " composers indexed by normalized name");
 		diskFileOutOfSync = true;
 		return;
 	}
@@ -124,6 +122,9 @@ public class ComposerDatabase {
 			updatee.knownComposer(flag);
 		}
 		// I'm not quite sure how this (checkbox at the moment) could get set to what it already is, but those two conditions between them ignore such an event
+	}
+	protected boolean safeToClose() {
+		return !diskFileOutOfSync;
 	}
 	protected boolean writeToCSVFile() {
         try {

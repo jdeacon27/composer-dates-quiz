@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -189,8 +192,6 @@ public class ComposerDatesQuiz extends JFrame {
 		fieldLabel01.setBounds(20, 00, 290, 30);
 		editPanel.add(fieldLabel01);
 
-		// Use spin buttons and print the number of matches between the buttons
-		// Update the composer on field events; and only have a button for Write Database?
 		/*JTextField*/ p3composerNameFragmentPrompt.setBounds(20, 30, 270, 30);
 		p3composerNameFragmentPrompt.setToolTipText("To search for the composer you want to edit, enter their name or a part of their name and press the Enter key.");
 		p3composerNameFragmentPrompt.setOpaque(true);
@@ -319,7 +320,20 @@ public class ComposerDatesQuiz extends JFrame {
 	    editPanel.add(p3WriteButton);
 
 // Finish off the JFrame
-		this.setSize(400,500);		// width, height
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent windowEvent) {
+				if ( !composerDatabase.safeToClose() ) {
+					if ( JOptionPane.showConfirmDialog(null, "There appear to have been composer edits. Are you sure you want to close without writing to disk?", "Close Window?", 
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+						System.exit(0);
+					} else {
+						composerDatabase.writeToCSVFile();
+					}
+				}
+			}
+		});
+	    this.setSize(400,500);		// width, height
 		lifetimePanel.getRootPane().setDefaultButton(p1SubmitButton);
         this.setLocationByPlatform(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
