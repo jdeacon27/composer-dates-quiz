@@ -66,7 +66,6 @@ public class ComposerDatabase {
 		} catch(IOException e) {
 			System.out.println("File not found");
 		}
-		this.writeToCSVFile();
 	}
 	
 	protected int totalComposerEntries() { return allComposers.size(); }

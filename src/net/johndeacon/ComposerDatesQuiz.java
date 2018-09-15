@@ -184,13 +184,14 @@ public class ComposerDatesQuiz extends JFrame {
 		onThisDayAnswer.setText("");
 		
 // Panel 3, the edit panel
-		JLabel fieldLabel01 = new JLabel("Name (or fragment of name)");
+		JLabel fieldLabel01 = new JLabel("Name (or fragment of name) to search for");
 		fieldLabel01.setBounds(50, 00, 290, 30);
 		editPanel.add(fieldLabel01);
 
 		// Use spin buttons and print the number of matches between the buttons
 		// Update the composer on field events; and only have a button for Write Database?
 		/*JTextField*/ p3composerNameFragmentPrompt.setBounds(50, 30, 290, 30);
+		p3composerNameFragmentPrompt.setToolTipText("To search for the composer you want to edit, enter their name or a part of their name and press the Enter key.");
 		p3composerNameFragmentPrompt.setOpaque(true);
 		p3composerNameFragmentPrompt.setBackground(Color.WHITE);
 		p3composerNameFragmentPrompt.addActionListener(new ActionListener() {
@@ -208,7 +209,12 @@ public class ComposerDatesQuiz extends JFrame {
 		p3separator.setBounds(5, 75, 365, 30);
 		editPanel.add(p3separator);
 	    
-		/*JTextField*/ p3composerNameField.setBounds(50, 90, 290, 30);
+		JLabel fieldLabel02 = new JLabel("Name");
+		fieldLabel02.setBounds(50, 90, 290, 30);
+		editPanel.add(fieldLabel02);
+
+		/*JTextField*/ p3composerNameField.setBounds(50, 120, 290, 30);
+		p3composerNameField.setToolTipText("The name of the composer you found. You can edit the name.");
 //		p3composerNameField.setOpaque(true);
 //		p3composerNameField.setBackground(Color.WHITE);
 		p3composerNameField.addActionListener(new ActionListener() {
@@ -218,21 +224,32 @@ public class ComposerDatesQuiz extends JFrame {
 		});
 		editPanel.add(p3composerNameField);
 		
-	    /*JLabel*/ p3birthField.setBounds(50, 150, 80, 30);
+		JLabel fieldLabel03 = new JLabel("Born");
+		fieldLabel03.setBounds(50, 180, 290, 30);
+		editPanel.add(fieldLabel03);
+
+		/*JLabel*/ p3birthField.setBounds(50, 210, 80, 30);
+		p3birthField.setToolTipText("This year can't be editied.");
 		p3birthField.setOpaque(true);
 		p3birthField.setBackground(Color.WHITE);
 	    editPanel.add(p3birthField);
 
 	    JLabel p3datesHyphen = new JLabel("-");
-	    p3datesHyphen.setBounds(150, 150, 20, 30);
+	    p3datesHyphen.setBounds(150, 210, 20, 30);
 	    editPanel.add(p3datesHyphen);
 
-	    /*JLabel*/ p3deathField.setBounds(180, 150, 80, 30);
+		JLabel fieldLabel04 = new JLabel("Died");
+		fieldLabel04.setBounds(180, 180, 290, 30);
+		editPanel.add(fieldLabel04);
+
+	    /*JLabel*/ p3deathField.setBounds(180, 210, 80, 30);
+		p3deathField.setToolTipText("This year can't be editied.");
 		p3deathField.setOpaque(true);
 		p3deathField.setBackground(Color.WHITE);
 		editPanel.add(p3deathField);
 
-		/*JCheckBox*/ p3knownComposer.setBounds(50, 210, 130, 30);
+		/*JCheckBox*/ p3knownComposer.setBounds(50, 270, 130, 30);
+		p3knownComposer.setToolTipText("Change whether or not this composer appears in the known composers lifetimes quiz.");
 		p3knownComposer.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if ( e.getStateChange() == ItemEvent.SELECTED ) {
@@ -247,6 +264,15 @@ public class ComposerDatesQuiz extends JFrame {
 		/*JLabel*/ p3familyNameFirstField.setBounds(50, 270, 390, 30);
 		editPanel.add(p3familyNameFirstField);
 
+	    JButton p3WriteButton = new JButton("Write");  
+	    p3WriteButton.setBounds(50, 330, 100, 40);
+	    p3WriteButton.setToolTipText("Write internal database out to the disk file.");
+	    p3WriteButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				composerDatabase.writeToCSVFile();
+			}
+		});
+	    editPanel.add(p3WriteButton);
 
 // Finish off the JFrame
 		this.setSize(400,500);		// width, height
