@@ -266,7 +266,7 @@ public class ComposerDatesQuiz extends JFrame {
 
 	    JButton p3WriteButton = new JButton("Write");  
 	    p3WriteButton.setBounds(50, 330, 100, 40);
-	    p3WriteButton.setToolTipText("Write internal database out to the disk file.");
+	    p3WriteButton.setToolTipText("<html>Write internal database out to the disk file.<br>The existing file will be renamed .orig.csv and any existing .orig.csv file will be replaced.</html>");
 	    p3WriteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				composerDatabase.writeToCSVFile();

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.text.Normalizer;
 import java.util.List;
 import java.util.Map;
@@ -126,7 +127,8 @@ public class ComposerDatabase {
 	}
 	protected boolean writeToCSVFile() {
         try {
-        	CSVWriter writer = new CSVWriter(Files.newBufferedWriter(Paths.get("./composers.new.csv")));
+        	Files.move(Paths.get("./composers.csv"), Paths.get("./composers.orig.csv"), REPLACE_EXISTING);
+        	CSVWriter writer = new CSVWriter(Files.newBufferedWriter(Paths.get("./composers.csv")));
         	String[] headerLine = {"Family Name First", "Forename First", "Birth Date", "Death Date", "Age", "Memorized"};
         	writer.writeNext(headerLine);
         	for (Composer nextComposer : allComposers) {
