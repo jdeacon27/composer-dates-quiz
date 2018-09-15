@@ -19,7 +19,7 @@ public class Chooser {
 	}
 	protected Composer nextShuffledKnownComposer() {
 		if ( shuffledKnownComposerIndices.size() == 0 ) {
-			for ( int index = 0; index < _totalKnownComposerEntries; index++ ) {
+			for ( int index = 0; index < _database.totalKnownComposerEntries(); index++ ) {
 				shuffledKnownComposerIndices.add(index); 
 			}
 		}

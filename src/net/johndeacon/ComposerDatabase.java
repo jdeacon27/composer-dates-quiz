@@ -43,8 +43,10 @@ public class ComposerDatabase {
 				accentlessComposerName = this.normalize(nextRecord[foreNameFirstField]);
 				composers.put(accentlessComposerName, nextComposer);
 				if ( nextRecord[knownComposerField].length() != 0 ) {
+					// In order to access known composers efficiently we keep a list of their indices in the main list
 					knownComposerIndices.add(allComposers.size()-1);	// size is 1 greater than the index of the last element
 					
+					// And for the known composers we gather their birth and death events by year
 					birthYear = Integer.parseInt(nextRecord[birthYearField]);
 					deathYear = Integer.parseInt(nextRecord[deathYearField]);
 					Yearful knownYearEntry;
@@ -56,9 +58,8 @@ public class ComposerDatabase {
 					knownYearEntry.addEvent(nextRecord[foreNameFirstField] + " died");
 					knownYears.put(deathYear, knownYearEntry);
 				}
-				/* While building, a map is convenient; but from then on access is (currently)
-				   only by (random) position, so now we'll build an ArrayList from the entries.
-				*/
+				// While building the above structures, a map is convenient; but from then on access is (currently)
+				//   only by (random) position, so now we'll build an ArrayList from the entries.
 				knownYearsIndexed = new ArrayList<Yearful>(knownYears.values());
 			}
 			reader.close();
@@ -111,9 +112,17 @@ public class ComposerDatabase {
 		return;
 	}
 	protected void updateKnownComposer(Composer updatee, String flag) {
-		updatee.knownComposer(flag);
-		// have to add the known composer to the known composer index
-		diskFileOutOfSync = true;
+		int indexInKnownComposerIndices = knownComposerIndices.indexOf(allComposers.indexOf(updatee));	// Is the updatee already known
+		if ( flag.equals("Y") && indexInKnownComposerIndices == -1 ) { // then it is a change and it's an addition
+			knownComposerIndices.add(allComposers.indexOf(updatee));
+			diskFileOutOfSync = true;
+			updatee.knownComposer(flag);
+		}
+		if ( flag.equals("") && indexInKnownComposerIndices != -1 ) { // then it is a change and it's a removal
+			knownComposerIndices.remove(indexInKnownComposerIndices);
+			diskFileOutOfSync = true;
+			updatee.knownComposer(flag);
+		}
 	}
 	protected boolean writeToCSVFile() {
         try {

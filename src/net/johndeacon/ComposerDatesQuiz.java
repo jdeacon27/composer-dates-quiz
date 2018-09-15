@@ -190,19 +190,19 @@ public class ComposerDatesQuiz extends JFrame {
 
 		// Use spin buttons and print the number of matches between the buttons
 		// Update the composer on field events; and only have a button for Write Database?
-		/*JTextField*/ composerNameFragmentPrompt.setBounds(50, 30, 290, 30);
-		composerNameFragmentPrompt.setOpaque(true);
-		composerNameFragmentPrompt.setBackground(Color.WHITE);
-		composerNameFragmentPrompt.addActionListener(new ActionListener() {
+		/*JTextField*/ p3composerNameFragmentPrompt.setBounds(50, 30, 290, 30);
+		p3composerNameFragmentPrompt.setOpaque(true);
+		p3composerNameFragmentPrompt.setBackground(Color.WHITE);
+		p3composerNameFragmentPrompt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String sought = composerNameFragmentPrompt.getText();
+				String sought = p3composerNameFragmentPrompt.getText();
 				List<String> matches = composerDatabase.composersThatMatch(sought);
 				// Need to check that there was at least one match
 				currentComposer = composerDatabase.composer(matches.get(0));
 				ComposerDatesQuiz.this.updateEditPanel();
 			}
 		});
-		editPanel.add(composerNameFragmentPrompt);
+		editPanel.add(p3composerNameFragmentPrompt);
 		
 		JSeparator p3separator = new JSeparator(SwingConstants.HORIZONTAL);
 		p3separator.setBounds(5, 75, 365, 30);
@@ -279,6 +279,11 @@ public class ComposerDatesQuiz extends JFrame {
 	        JTabbedPane tabbedPane = (JTabbedPane) event.getSource();
 	        int selectedIndex = tabbedPane.getSelectedIndex();
 	        if ( selectedIndex == 0 ) {
+	        	if ( quizzingKnownComposers ) {
+	 	        	numbersInfo.setText("(Quizzing from " + composerDatabase.totalKnownComposerEntries() + " composers)");
+	        	} else {
+	 	        	numbersInfo.setText("(Quizzing from " + composerDatabase.totalComposerEntries() + " composers)");
+	        	}
 				p1NextButton.requestFocusInWindow();
 				p1NextButton.getRootPane().setDefaultButton(p1NextButton);
 	        } else if ( selectedIndex == 1 ) {
@@ -286,6 +291,7 @@ public class ComposerDatesQuiz extends JFrame {
 				p2SubmitButton.getRootPane().setDefaultButton(p2SubmitButton);
 	        } else {
 	    		if ( currentComposer != null ) {
+	    			p3composerNameFragmentPrompt.setText("");
 	    			ComposerDatesQuiz.this.updateEditPanel();
 	    		}
 	        }
@@ -358,7 +364,7 @@ public class ComposerDatesQuiz extends JFrame {
     private JButton p2NextButton = new JButton();
     private JTextArea onThisDayAnswer = new JTextArea();
     
-    private JTextField composerNameFragmentPrompt = new JTextField();
+    private JTextField p3composerNameFragmentPrompt = new JTextField();
     private JTextField p3composerNameField = new JTextField();
     private JLabel p3birthField = new JLabel();
     private JLabel p3deathField = new JLabel();
