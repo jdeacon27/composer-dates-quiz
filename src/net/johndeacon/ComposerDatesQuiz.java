@@ -205,9 +205,9 @@ public class ComposerDatesQuiz extends JFrame {
 				p3nextComposerButton.setEnabled(false);
 				currentMatch = -1;
 				if ( matches.size() > 0 ) {
-					currentComposer = composerDatabase.composer(matches.get(0));
+					currentMatch = 0;
+					currentComposer = composerDatabase.composer(matches.get(currentMatch));
 					ComposerDatesQuiz.this.updateEditPanel();
-					currentMatch = 1;
 				}
 				if ( matches.size() > 1 ) {
 					p3nextComposerButton.setEnabled(true);
@@ -221,10 +221,10 @@ public class ComposerDatesQuiz extends JFrame {
 		p3prevComposerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				p3nextComposerButton.setEnabled(true);
-				currentComposer = composerDatabase.composer(matches.get(currentMatch--));
+				currentComposer = composerDatabase.composer(matches.get(--currentMatch));
 				ComposerDatesQuiz.this.updateEditPanel();
-				if ( currentMatch == -1 ) {
-					p3prevComposerButton.setEnabled(false);
+				if ( currentMatch == 0 ) {					// We are switching to the first match of the matches array ...
+					p3prevComposerButton.setEnabled(false);	// there is no previous
 				}
 			}
 		});
@@ -239,11 +239,10 @@ public class ComposerDatesQuiz extends JFrame {
 		p3nextComposerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				p3prevComposerButton.setEnabled(true);
-				currentComposer = composerDatabase.composer(matches.get(currentMatch++));
+				currentComposer = composerDatabase.composer(matches.get(++currentMatch));
 				ComposerDatesQuiz.this.updateEditPanel();
-				if ( currentMatch == matches.size() ) {
-					p3nextComposerButton.setEnabled(false);
-					currentMatch -= 2;		// was pointing off the end of the matches array; Prev is all that can be done now; the previous match is therefore two back 
+				if ( currentMatch == matches.size() - 1 ) {		// We are switching to the last match of the matches array ...
+					p3nextComposerButton.setEnabled(false);		// there is no next
 				}
 			}
 		});
@@ -324,7 +323,6 @@ public class ComposerDatesQuiz extends JFrame {
 		lifetimePanel.getRootPane().setDefaultButton(p1SubmitButton);
         this.setLocationByPlatform(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
 	}
 
 	
@@ -369,7 +367,6 @@ public class ComposerDatesQuiz extends JFrame {
 	    		}
 	        }
 	    }
-
 	}
 
     public static void main(String[] args) {
@@ -385,7 +382,6 @@ public class ComposerDatesQuiz extends JFrame {
 				// This is asymmetric. One panel does these defaults here and the other elsewhere.
 			}
 		});
-		
 	}
 
 	protected void poseComposerQuestion() {
