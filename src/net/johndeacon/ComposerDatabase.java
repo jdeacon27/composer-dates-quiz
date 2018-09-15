@@ -123,6 +123,7 @@ public class ComposerDatabase {
 			diskFileOutOfSync = true;
 			updatee.knownComposer(flag);
 		}
+		// I'm not quite sure how this (checkbox at the moment) could get set to what it already is, but those two conditions between them ignore such an event
 	}
 	protected boolean writeToCSVFile() {
         try {
