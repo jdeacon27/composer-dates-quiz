@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -185,35 +186,78 @@ public class ComposerDatesQuiz extends JFrame {
 		
 // Panel 3, the edit panel
 		JLabel fieldLabel01 = new JLabel("Name (or fragment of name) to search for");
-		fieldLabel01.setBounds(50, 00, 290, 30);
+		fieldLabel01.setBounds(20, 00, 290, 30);
 		editPanel.add(fieldLabel01);
 
 		// Use spin buttons and print the number of matches between the buttons
 		// Update the composer on field events; and only have a button for Write Database?
-		/*JTextField*/ p3composerNameFragmentPrompt.setBounds(50, 30, 290, 30);
+		/*JTextField*/ p3composerNameFragmentPrompt.setBounds(20, 30, 270, 30);
 		p3composerNameFragmentPrompt.setToolTipText("To search for the composer you want to edit, enter their name or a part of their name and press the Enter key.");
 		p3composerNameFragmentPrompt.setOpaque(true);
 		p3composerNameFragmentPrompt.setBackground(Color.WHITE);
 		p3composerNameFragmentPrompt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String sought = p3composerNameFragmentPrompt.getText();
-				List<String> matches = composerDatabase.composersThatMatch(sought);
+				/*List<String>*/ matches = composerDatabase.composersThatMatch(sought);
+				p3numberOfMatchesPrompt.setText(matches.size() + " match" + ((matches.size() == 1) ? "" : "es"));
 				// Need to check that there was at least one match
-				currentComposer = composerDatabase.composer(matches.get(0));
-				ComposerDatesQuiz.this.updateEditPanel();
+				p3prevComposerButton.setEnabled(false);
+				p3nextComposerButton.setEnabled(false);
+				currentMatch = -1;
+				if ( matches.size() > 0 ) {
+					currentComposer = composerDatabase.composer(matches.get(0));
+					ComposerDatesQuiz.this.updateEditPanel();
+					currentMatch = 1;
+				}
+				if ( matches.size() > 1 ) {
+					p3nextComposerButton.setEnabled(true);
+				}
 			}
 		});
 		editPanel.add(p3composerNameFragmentPrompt);
 		
+		p3prevComposerButton.setBounds(300, 10, 40, 25);
+		p3prevComposerButton.setMargin(new Insets(0, 0, 0, 0));
+		p3prevComposerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p3nextComposerButton.setEnabled(true);
+				currentComposer = composerDatabase.composer(matches.get(currentMatch--));
+				ComposerDatesQuiz.this.updateEditPanel();
+				if ( currentMatch == -1 ) {
+					p3prevComposerButton.setEnabled(false);
+				}
+			}
+		});
+		editPanel.add(p3prevComposerButton);
+		
+		p3numberOfMatchesPrompt.setBounds(300, 35, 70, 25);
+//		p3numberOfMatchesPrompt.setText("50 matches");
+		editPanel.add(p3numberOfMatchesPrompt);
+		
+		p3nextComposerButton.setBounds(300, 60, 40, 25);
+		p3nextComposerButton.setMargin(new Insets(0, 0, 0, 0));
+		p3nextComposerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				p3prevComposerButton.setEnabled(true);
+				currentComposer = composerDatabase.composer(matches.get(currentMatch++));
+				ComposerDatesQuiz.this.updateEditPanel();
+				if ( currentMatch == matches.size() ) {
+					p3nextComposerButton.setEnabled(false);
+					currentMatch -= 2;		// was pointing off the end of the matches array; Prev is all that can be done now; the previous match is therefore two back 
+				}
+			}
+		});
+		editPanel.add(p3nextComposerButton);
+		
 		JSeparator p3separator = new JSeparator(SwingConstants.HORIZONTAL);
-		p3separator.setBounds(5, 75, 365, 30);
+		p3separator.setBounds(5, 105, 365, 30);
 		editPanel.add(p3separator);
 	    
 		JLabel fieldLabel02 = new JLabel("Name");
-		fieldLabel02.setBounds(50, 90, 290, 30);
+		fieldLabel02.setBounds(50, 120, 290, 30);
 		editPanel.add(fieldLabel02);
 
-		/*JTextField*/ p3composerNameField.setBounds(50, 120, 290, 30);
+		/*JTextField*/ p3composerNameField.setBounds(50, 150, 290, 30);
 		p3composerNameField.setToolTipText("The name of the composer you found. You can edit the name.");
 //		p3composerNameField.setOpaque(true);
 //		p3composerNameField.setBackground(Color.WHITE);
@@ -225,24 +269,24 @@ public class ComposerDatesQuiz extends JFrame {
 		editPanel.add(p3composerNameField);
 		
 		JLabel fieldLabel03 = new JLabel("Born");
-		fieldLabel03.setBounds(50, 180, 290, 30);
+		fieldLabel03.setBounds(50, 200, 290, 30);
 		editPanel.add(fieldLabel03);
 
-		/*JLabel*/ p3birthField.setBounds(50, 210, 80, 30);
+		/*JLabel*/ p3birthField.setBounds(50, 230, 80, 30);
 		p3birthField.setToolTipText("This year can't be editied.");
 		p3birthField.setOpaque(true);
 		p3birthField.setBackground(Color.WHITE);
 	    editPanel.add(p3birthField);
 
 	    JLabel p3datesHyphen = new JLabel("-");
-	    p3datesHyphen.setBounds(150, 210, 20, 30);
+	    p3datesHyphen.setBounds(150, 230, 20, 30);
 	    editPanel.add(p3datesHyphen);
 
 		JLabel fieldLabel04 = new JLabel("Died");
-		fieldLabel04.setBounds(180, 180, 290, 30);
+		fieldLabel04.setBounds(180, 200, 290, 30);
 		editPanel.add(fieldLabel04);
 
-	    /*JLabel*/ p3deathField.setBounds(180, 210, 80, 30);
+	    /*JLabel*/ p3deathField.setBounds(180, 230, 80, 30);
 		p3deathField.setToolTipText("This year can't be editied.");
 		p3deathField.setOpaque(true);
 		p3deathField.setBackground(Color.WHITE);
@@ -250,6 +294,7 @@ public class ComposerDatesQuiz extends JFrame {
 
 		/*JCheckBox*/ p3knownComposer.setBounds(50, 270, 130, 30);
 		p3knownComposer.setToolTipText("Change whether or not this composer appears in the known composers lifetimes quiz.");
+		p3knownComposer.setBounds(50, 280, 100, 30);
 		p3knownComposer.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if ( e.getStateChange() == ItemEvent.SELECTED ) {
@@ -261,11 +306,11 @@ public class ComposerDatesQuiz extends JFrame {
 		});
 		editPanel.add(p3knownComposer);
 
-		/*JLabel*/ p3familyNameFirstField.setBounds(50, 270, 390, 30);
+		/*JLabel*/ p3familyNameFirstField.setBounds(50, 320, 390, 30);
 		editPanel.add(p3familyNameFirstField);
 
 	    JButton p3WriteButton = new JButton("Write");  
-	    p3WriteButton.setBounds(50, 330, 100, 40);
+	    p3WriteButton.setBounds(50, 370, 100, 40);
 	    p3WriteButton.setToolTipText("<html>Write internal database out to the disk file.<br>The existing file will be renamed .orig.csv and any existing .orig.csv file will be replaced.</html>");
 	    p3WriteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -316,6 +361,8 @@ public class ComposerDatesQuiz extends JFrame {
 				p2SubmitButton.requestFocusInWindow();
 				p2SubmitButton.getRootPane().setDefaultButton(p2SubmitButton);
 	        } else {
+				p3prevComposerButton.setEnabled(false);
+				p3nextComposerButton.setEnabled(false);
 	    		if ( currentComposer != null ) {
 	    			p3composerNameFragmentPrompt.setText("");
 	    			ComposerDatesQuiz.this.updateEditPanel();
@@ -390,7 +437,12 @@ public class ComposerDatesQuiz extends JFrame {
     private JButton p2NextButton = new JButton();
     private JTextArea onThisDayAnswer = new JTextArea();
     
+    private List<String> matches;
+    private int currentMatch = -1;
     private JTextField p3composerNameFragmentPrompt = new JTextField();
+    private JButton p3prevComposerButton = new JButton("Prev");
+    private JLabel p3numberOfMatchesPrompt = new JLabel();
+    private JButton p3nextComposerButton = new JButton("Next");
     private JTextField p3composerNameField = new JTextField();
     private JLabel p3birthField = new JLabel();
     private JLabel p3deathField = new JLabel();
