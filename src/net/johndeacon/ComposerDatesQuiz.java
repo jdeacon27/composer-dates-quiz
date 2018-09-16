@@ -273,7 +273,7 @@ public class ComposerDatesQuiz extends JFrame {
 		editPanel.add(fieldLabel03);
 
 		/*JLabel*/ p3birthField.setBounds(50, 230, 80, 30);
-		p3birthField.setToolTipText("This year can't be editied.");
+		p3birthField.setToolTipText("Years can't be editied.");
 		p3birthField.setOpaque(true);
 		p3birthField.setBackground(Color.WHITE);
 	    editPanel.add(p3birthField);
@@ -287,7 +287,7 @@ public class ComposerDatesQuiz extends JFrame {
 		editPanel.add(fieldLabel04);
 
 	    /*JLabel*/ p3deathField.setBounds(180, 230, 80, 30);
-		p3deathField.setToolTipText("This year can't be editied.");
+		p3deathField.setToolTipText("Years can't be editied.");
 		p3deathField.setOpaque(true);
 		p3deathField.setBackground(Color.WHITE);
 		editPanel.add(p3deathField);
@@ -307,6 +307,7 @@ public class ComposerDatesQuiz extends JFrame {
 		editPanel.add(p3knownComposer);
 
 		/*JLabel*/ p3familyNameFirstField.setBounds(50, 320, 390, 30);
+		p3familyNameFirstField.setToolTipText("The full name according to the original source database.");
 		editPanel.add(p3familyNameFirstField);
 
 	    JButton p3WriteButton = new JButton("Write");  
@@ -379,6 +380,7 @@ public class ComposerDatesQuiz extends JFrame {
 	    			p3composerNameFragmentPrompt.setText("");
 	    			ComposerDatesQuiz.this.updateEditPanel();
 	    		}
+	    		p3composerNameFragmentPrompt.requestFocusInWindow();
 	        }
 	    }
 	}

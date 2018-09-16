@@ -144,6 +144,7 @@ public class ComposerDatabase {
         } catch(IOException e) {
         	e.printStackTrace();
         }
+        diskFileOutOfSync = false;
 		return true;
 	}
 	
