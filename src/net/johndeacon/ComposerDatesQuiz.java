@@ -14,6 +14,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
@@ -30,6 +31,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -54,6 +56,8 @@ public class ComposerDatesQuiz extends JFrame {
 
 // Panel 1, the lifetime panel
 		/*JLabel*/ composerNamePrompt.setBounds(50, 30, 290, 30);		// x axis, y axis, width, height
+	    Border blackBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
+	    composerNamePrompt.setBorder(blackBorder);
 		composerNamePrompt.setOpaque(true);
 		composerNamePrompt.setBackground(Color.WHITE);
 		lifetimePanel.add(composerNamePrompt);
@@ -69,8 +73,10 @@ public class ComposerDatesQuiz extends JFrame {
 	    lifetimePanel.add(p1deathAnswerField);
 
 	    JLabel resultField = new JLabel();
-	    resultField.setBounds(50, 150, 280, 30);
-		resultField.setOpaque(true);
+	    resultField.setBounds(50, 145, 280, 30);
+//	    Border resultFieldBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
+	    resultField.setBorder(blackBorder);
+//		resultField.setOpaque(true);
 //		resultField.setBackground(Color.WHITE);
 		lifetimePanel.add(resultField);
 
@@ -181,10 +187,10 @@ public class ComposerDatesQuiz extends JFrame {
 		inThisYearPanel.add(p2NextButton);
 
 		/*JTextArea*/ onThisDayAnswer = new JTextArea();
-		JScrollPane scrollPane = new JScrollPane(onThisDayAnswer);
-		scrollPane.setBounds(50, 130, 290, 300);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		inThisYearPanel.add(scrollPane);
+		JScrollPane otdaScrollPane = new JScrollPane(onThisDayAnswer);
+		otdaScrollPane.setBounds(50, 130, 290, 290);
+		otdaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		inThisYearPanel.add(otdaScrollPane);
 		onThisDayAnswer.setText("");
 		
 // Panel 3, the edit panel
@@ -273,9 +279,10 @@ public class ComposerDatesQuiz extends JFrame {
 		editPanel.add(fieldLabel03);
 
 		/*JLabel*/ p3birthField.setBounds(50, 230, 80, 30);
+		p3birthField.setBorder(blackBorder);
 		p3birthField.setToolTipText("Years can't be editied.");
-		p3birthField.setOpaque(true);
-		p3birthField.setBackground(Color.WHITE);
+//		p3birthField.setOpaque(true);
+//		p3birthField.setBackground(Color.WHITE);
 	    editPanel.add(p3birthField);
 
 	    JLabel p3datesHyphen = new JLabel("-");
@@ -287,8 +294,9 @@ public class ComposerDatesQuiz extends JFrame {
 		editPanel.add(fieldLabel04);
 
 	    /*JLabel*/ p3deathField.setBounds(180, 230, 80, 30);
-		p3deathField.setToolTipText("Years can't be editied.");
-		p3deathField.setOpaque(true);
+	    p3deathField.setBorder(blackBorder);
+//	    p3deathField.setToolTipText("Years can't be editied.");
+//		p3deathField.setOpaque(true);
 		p3deathField.setBackground(Color.WHITE);
 		editPanel.add(p3deathField);
 

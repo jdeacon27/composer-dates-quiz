@@ -5,7 +5,7 @@ This is a private project (although I am not trying to _forbid_ anyone from cont
 I was an Eclipse user long ago. I wanted to get up-to-date with using Eclipse (Java) with Maven and git.
 So this is a little play project.
 
-It will read a database of composer names and dates and then quizz the user for the composer's dates.
+It will read a database of composer names and dates and then quiz the user for the composer's dates.
 It's reached the point where it's runnable, working from an unsophisticated GUI. If you get both
 the birth and death dates correct, you'll be told so. If you omit either or both dates, or
 get any dates wrong, you will be shown the correct dates. 
@@ -20,6 +20,9 @@ There is a second tab for In This Year questions. A date selected from the memor
 is displayed and you try to recall any births or deaths in that year. You don't actually write
 an answer you simply hit the Respond button and see if you were right.
 
+There is a third panel for editing the _Memorized_ flag and the familiar name (forename first
+name). The in-memory database can be written back to the CSV file.
+
 It is moderately object oriented.
 
 The CSV file has the hundred or so composers that I've heard of. I have a bigger file that I
@@ -30,7 +33,7 @@ release, such markings would be down to the user and/or would be created during 
 
 There are two "name" fields in the CSV. The first has the family name first followed by all
 the forenames. The second name field has the forenames first. For most of those composers marked
- as _Memorized_, I've edited the second name fields' forenames to match common usage (per 
+ as _Memorized_, I've already edited the second name fields' forenames to match common usage (per 
  Wikipedia). Mozart for example doesn't have all the registry names or all the names that
  Leopold thought were in the registry. Instead he is Wolfgang Amadeus Mozart.
 
