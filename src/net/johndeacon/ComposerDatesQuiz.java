@@ -264,7 +264,7 @@ public class ComposerDatesQuiz extends JFrame {
 		editPanel.add(fieldLabel02);
 
 		/*JTextField*/ p3composerNameField.setBounds(50, 150, 290, 30);
-		p3composerNameField.setToolTipText("The name of the composer you found. You can edit the name.");
+		p3composerNameField.setToolTipText("<html>The name of the composer you found. You can edit the name.<br>But don't forget to press enter after editing!</html>");
 //		p3composerNameField.setOpaque(true);
 //		p3composerNameField.setBackground(Color.WHITE);
 		p3composerNameField.addActionListener(new ActionListener() {

@@ -141,7 +141,6 @@ public class ComposerDatabase {
         				nextComposer.age(),
         				nextComposer.knownComposer() });
         	}
-        	//writer.close();
         	databaseFile.close(writer);
 //        } catch(IOException e) {		// I don't understand why this catch block is unreachable; why don't the writes potentially throw exceptions?
 //        	e.printStackTrace();
