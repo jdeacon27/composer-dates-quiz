@@ -66,7 +66,7 @@ public class ComposerDatabase {
 			}
 			reader.close();
 		} catch(IOException e) {
-			System.out.println("File not found");
+			e.printStackTrace();;
 		}
 	}
 	
@@ -128,7 +128,7 @@ public class ComposerDatabase {
 		return !diskFileOutOfSync;
 	}
 	protected boolean writeToCSVFile() {
-        try {
+//        try {
         	databaseFile.backup();
     		CSVWriter writer = databaseFile.getCSVWriter();
         	String[] headerLine = {"Family Name First", "Forename First", "Birth Date", "Death Date", "Age", "Memorized"};
@@ -141,10 +141,11 @@ public class ComposerDatabase {
         				nextComposer.age(),
         				nextComposer.knownComposer() });
         	}
-        	writer.close();
-        } catch(IOException e) {
-        	e.printStackTrace();
-        }
+        	//writer.close();
+        	databaseFile.close(writer);
+//        } catch(IOException e) {		// I don't understand why this catch block is unreachable; why don't the writes potentially throw exceptions?
+//        	e.printStackTrace();
+//        }
         diskFileOutOfSync = false;
 		return true;
 	}
