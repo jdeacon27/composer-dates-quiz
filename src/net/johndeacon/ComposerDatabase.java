@@ -26,8 +26,8 @@ public class ComposerDatabase {
 	 * The database can also be asked for lists of birth and death events by year (CE).
 	 */
 	protected ComposerDatabase() {
-		DatabaseFile file = new DatabaseFile();
-		CSVReader reader = file.getCSVReader();
+		databaseFile = new DatabaseFile();
+		CSVReader reader = databaseFile.getCSVReader();
 		try {
 			String[] nextRecord;
 			while ( (nextRecord = reader.readNext()) != null ) {
@@ -129,8 +129,8 @@ public class ComposerDatabase {
 	}
 	protected boolean writeToCSVFile() {
         try {
-        	Files.move(Paths.get("./composers.csv"), Paths.get("./composers.orig.csv"), REPLACE_EXISTING);
-        	CSVWriter writer = new CSVWriter(Files.newBufferedWriter(Paths.get("./composers.csv")));
+        	databaseFile.backup();
+    		CSVWriter writer = databaseFile.getCSVWriter();
         	String[] headerLine = {"Family Name First", "Forename First", "Birth Date", "Death Date", "Age", "Memorized"};
         	writer.writeNext(headerLine);
         	for (Composer nextComposer : allComposers) {
@@ -149,6 +149,7 @@ public class ComposerDatabase {
 		return true;
 	}
 	
+	private DatabaseFile databaseFile;
 	private List<Composer> allComposers = new ArrayList<>();
 	private List<Integer> knownComposerIndices = new ArrayList<>();
 	private Map<String,Composer> composers = new HashMap<>();
