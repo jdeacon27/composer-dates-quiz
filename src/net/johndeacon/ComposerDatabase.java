@@ -26,9 +26,10 @@ public class ComposerDatabase {
 	 * The database can also be asked for lists of birth and death events by year (CE).
 	 */
 	protected ComposerDatabase() {
+		DatabaseFile file = new DatabaseFile();
+		CSVReader reader = file.getCSVReader();
 		try {
 			String[] nextRecord;
-			CSVReader reader = new CSVReaderBuilder(new InputStreamReader( new FileInputStream("composers.csv"),"UTF-8") ).withSkipLines(1).build();
 			while ( (nextRecord = reader.readNext()) != null ) {
 				int birthYear, deathYear;
 				Composer nextComposer;
