@@ -68,6 +68,7 @@ public class ComposerDatabase {
 		} catch(IOException e) {
 			e.printStackTrace();;
 		}
+		diskFileOutOfSync = false;
 	}
 	
 	protected int totalComposerEntries() { return allComposers.size(); }
@@ -124,11 +125,25 @@ public class ComposerDatabase {
 		}
 		// I'm not quite sure how this (checkbox at the moment) could get set to what it already is, but those two conditions between them ignore such an event
 	}
-	protected boolean safeToClose() {
-		return !diskFileOutOfSync;
+	protected boolean unsavedFileChanges () {
+		return diskFileOutOfSync;
+	}
+	@Deprecated protected boolean safeToClose() {
+		if ( diskFileOutOfSync ) {
+			return false;
+		} else {
+			if ( !databaseFile.safeToExit() ) {
+				
+			}
+			return true;
+		}
+	}
+	protected void close() {
+		// At the moment there's nothing to do at termination except ask the file if it needs to do anything (like upload to the cloud if it's not a local file). 
+		databaseFile.close();
 	}
 	protected boolean writeToCSVFile() {
-//        try {
+        try {
         	databaseFile.backup();
     		CSVWriter writer = databaseFile.getCSVWriter();
         	String[] headerLine = {"Family Name First", "Forename First", "Birth Date", "Death Date", "Age", "Memorized"};
@@ -141,10 +156,11 @@ public class ComposerDatabase {
         				nextComposer.age(),
         				nextComposer.knownComposer() });
         	}
-        	databaseFile.close(writer);
-//        } catch(IOException e) {		// I don't understand why this catch block is unreachable; why don't the writes potentially throw exceptions?
-//        	e.printStackTrace();
-//        }
+        	writer.close();
+//        	databaseFile.close(writer, isFinalWrite);
+        } catch(IOException e) {		// I don't understand why this catch block is unreachable; why don't the writes potentially throw exceptions?
+        	e.printStackTrace();
+        }
         diskFileOutOfSync = false;
 		return true;
 	}
@@ -155,7 +171,7 @@ public class ComposerDatabase {
 	private Map<String,Composer> composers = new HashMap<>();
 	private Map<Integer,Yearful> knownYears = new LinkedHashMap<>();		// Yearfuls "indexed" by CE year, e.g. 1756
 	private List<Yearful> knownYearsIndexed;								// Yearfuls indexed by index number: 0, 1, 2, ...
-	private boolean diskFileOutOfSync;
+	private boolean diskFileOutOfSync = false;
 	// Current layout of CSV file follows
 	private int familyNameFirstField = 0;
 	private int foreNameFirstField = 1;

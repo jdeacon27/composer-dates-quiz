@@ -331,14 +331,14 @@ public class ComposerDatesQuiz extends JFrame {
 // Finish off the JFrame
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent) {
-				if ( !composerDatabase.safeToClose() ) {
-					if ( JOptionPane.showConfirmDialog(null, "There appear to have been composer edits. Are you sure you want to close without writing to disk?", "Close Window?", 
+				if ( composerDatabase.unsavedFileChanges() ) {		// Changes have been made to the in-memory database
+					if ( JOptionPane.showConfirmDialog(null, "There appear to have been composer edits. Are you sure you want to close without writing to disk? Press Yes to exit without saving.", "Close Window?", 
 							JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-						System.exit(0);
-					} else {
+							JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {	// If the user selects NO, that means they want to save changes since the last write
 						composerDatabase.writeToCSVFile();
 					}
+					composerDatabase.close();		// In all cases, give the database it's opportunity to do anything else before terminating
+					System.exit(0);
 				}
 			}
 		});
@@ -442,6 +442,7 @@ public class ComposerDatesQuiz extends JFrame {
 	private boolean quizzingForenames;
 	private String currentYear;
 	private List<String> eventsThisYear;
+	private boolean FINAL_WRITE = true;
 	
     private JLabel composerNamePrompt = new JLabel();
     private JTextField p1birthAnswerField = new JTextField();
