@@ -14,10 +14,12 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import javax.swing.JOptionPane;
+
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.FileMetadata;
+/*import com.dropbox.core.v2.files.FileMetadata;*/
 import com.dropbox.core.v2.files.WriteMode;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -76,39 +78,30 @@ public class DatabaseFile {
 	protected void close() {
 		// This, and other places, would probably be helped by try with resources, which came in after my time try (resource list) { ...
 		try {
-//			writer.close();
 			if ( fileInUse == remoteCSVFile && fileCouldBeChanged ) {		// If working with a downloaded file and program is closing, upload.
-				mDbxClient.files().deleteV2(dropboxFileName + ".orig", null);
-				mDbxClient.files().moveV2(dropboxFileName, dropboxFileName + ".orig");
+				try {
+					mDbxClient.files().deleteV2(dropboxFileName + ".orig", null);	// Attempt to delete the existing backup before backing up
+				} catch(DbxException ignored) {
+					// Hopefully it just means that the backup wasn't on the remote for some reason
+				}
+				try {
+					mDbxClient.files().moveV2(dropboxFileName, dropboxFileName + ".orig");
+				} catch (DbxException ignored) {
+					// Somehow the original file is no longer on the remote. This is weirder.
+				}
 				InputStream localSourceFile = new FileInputStream(remoteCSVfileName);
-				FileMetadata metadata = mDbxClient.files().uploadBuilder(dropboxFileName)
-										.withMode(WriteMode.OVERWRITE)
-										.uploadAndFinish(localSourceFile);
+				try {
+					/*FileMetadata metadata = */mDbxClient.files().uploadBuilder(dropboxFileName)
+											.withMode(WriteMode.OVERWRITE)
+											.uploadAndFinish(localSourceFile);
+					/*System.out.println(metadata);*/
+				} catch(DbxException ingored) {
+					JOptionPane.showMessageDialog(null, "Upload to remote data source failed", "Failure on remote resource", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		} catch(IOException e) {
 			e.printStackTrace();
-		} catch(DbxException e) {
-			e.printStackTrace();
 		}
-	}
-	@Deprecated protected void close(CSVWriter writer, boolean isFinalWrite) {
-		// This, and other places, would probably be helped by try with resources, which came in after my time try (resource list) { ...
-		try {
-			writer.close();
-			if ( fileInUse == remoteCSVFile && isFinalWrite) {		// If working with a downloaded file and program is closing, upload.
-				mDbxClient.files().deleteV2(dropboxFileName + ".orig", null);
-				mDbxClient.files().moveV2(dropboxFileName, dropboxFileName + ".orig");
-				InputStream localSourceFile = new FileInputStream(remoteCSVfileName);
-				FileMetadata metadata = mDbxClient.files().uploadBuilder(dropboxFileName)
-										.withMode(WriteMode.OVERWRITE)
-										.uploadAndFinish(localSourceFile);
-			}
-		} catch(IOException e) {
-			e.printStackTrace();
-		} catch(DbxException e) {
-			e.printStackTrace();
-		}
-		fileCouldBeChanged = false;
 	}
 	protected void backup() {
     	try {

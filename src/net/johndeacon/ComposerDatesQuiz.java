@@ -442,7 +442,6 @@ public class ComposerDatesQuiz extends JFrame {
 	private boolean quizzingForenames;
 	private String currentYear;
 	private List<String> eventsThisYear;
-	private boolean FINAL_WRITE = true;
 	
     private JLabel composerNamePrompt = new JLabel();
     private JTextField p1birthAnswerField = new JTextField();

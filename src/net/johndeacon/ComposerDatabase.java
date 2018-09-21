@@ -1,11 +1,6 @@
 package net.johndeacon;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.text.Normalizer;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
 
 public class ComposerDatabase {
