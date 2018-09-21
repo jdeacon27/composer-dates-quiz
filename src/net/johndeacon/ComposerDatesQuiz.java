@@ -337,9 +337,9 @@ public class ComposerDatesQuiz extends JFrame {
 							JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {	// If the user selects NO, that means they want to save changes since the last write
 						composerDatabase.writeToCSVFile();
 					}
-					composerDatabase.close();		// In all cases, give the database it's opportunity to do anything else before terminating
-					System.exit(0);
 				}
+				composerDatabase.close();		// In all cases, give the database it's opportunity to do anything else before terminating
+				System.exit(0);
 			}
 		});
 	    this.setSize(400,500);		// width, height

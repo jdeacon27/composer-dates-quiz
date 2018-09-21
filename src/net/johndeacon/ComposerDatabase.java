@@ -151,8 +151,7 @@ public class ComposerDatabase {
         				nextComposer.knownComposer() });
         	}
         	writer.close();
-//        	databaseFile.close(writer, isFinalWrite);
-        } catch(IOException e) {		// I don't understand why this catch block is unreachable; why don't the writes potentially throw exceptions?
+        } catch(IOException e) {
         	e.printStackTrace();
         }
         diskFileOutOfSync = false;

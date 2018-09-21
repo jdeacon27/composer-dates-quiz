@@ -94,6 +94,9 @@ public class DatabaseFile {
 					/*FileMetadata metadata = */mDbxClient.files().uploadBuilder(dropboxFileName)
 											.withMode(WriteMode.OVERWRITE)
 											.uploadAndFinish(localSourceFile);
+					try {Thread.sleep(5000); } catch (InterruptedException ignored) {}	// There must be a better way. If I knew the process that is carrying out the upload then I could use waitFor(process)
+					localSourceFile.close();
+					Files.delete(Paths.get(remoteCSVfileName));
 					/*System.out.println(metadata);*/
 				} catch(DbxException ingored) {
 					JOptionPane.showMessageDialog(null, "Upload to remote data source failed", "Failure on remote resource", JOptionPane.INFORMATION_MESSAGE);
