@@ -77,9 +77,9 @@ public class DatabaseFile {
 	}
 	protected void close() {
 		// This, and other places, would probably be helped by try with resources, which came in after my time try (resource list) { ...
-		System.out.println("DatabaseFile close() called");
+		boolean stillNeedsUploading = false;
 		if ( fileInUse == remoteCSVFile && fileCouldBeChanged ) {		// If program is closing and working with a downloaded and changed file, upload.
-			System.out.println("In the downloaded file has changed block");
+			stillNeedsUploading = true;
 			try {
 				mDbxClient.files().deleteV2(dropboxFileName + ".orig", null);	// Attempt to delete the existing backup before backing up
 			} catch(DbxException ignored) {
@@ -95,20 +95,19 @@ public class DatabaseFile {
 				/*FileMetadata metadata = */mDbxClient.files().uploadBuilder(dropboxFileName)
 										.withMode(WriteMode.OVERWRITE)
 										.uploadAndFinish(localSourceFile);
-				fileInUse  = null;		// This is correct if we've successfully uploaded. The file "in use" is no longer here it's on the remote
-										// In the try block, t's also a sneaky way to signal to the upcoming delete not to delete, as the not uploaded file IS the file in use
+				stillNeedsUploading = false;
 				/*System.out.println(metadata);*/
 				localSourceFile.close();
 			} catch(DbxException ingored) {
+				stillNeedsUploading = true;
 				JOptionPane.showMessageDialog(null, "Upload to remote data source failed", "Failure on remote resource", JOptionPane.INFORMATION_MESSAGE);
 			} catch(IOException e) {
 				e.printStackTrace();
 			}
 		}
-		if ( fileInUse == remoteCSVFile ) {		// If program is closing and working with a downloaded file, and as long as the upload succeeded (see the sneaky flag action above) delete the download.
-			System.out.println("In the delete downloaded file block");
+		if ( fileInUse == remoteCSVFile && !stillNeedsUploading) {		// If program is closing and working with a downloaded file, and as long as any upload succeeded (see the sneaky flag action above) delete the download.
 			System.gc();
-			try {Thread.sleep(5000); } catch (InterruptedException ignored) {}	// There must be a better way. If I knew the process then I could use waitFor(process)
+			try {Thread.sleep(5000); } catch (InterruptedException ignored) {}	// There must be a better way. If I knew the process (or could be arsed to start it myself) then I could use waitFor(process)
 			try {
 				Files.delete(Paths.get(remoteCSVfileName));
 			} catch(IOException e) {
