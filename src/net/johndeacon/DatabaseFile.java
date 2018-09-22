@@ -77,33 +77,43 @@ public class DatabaseFile {
 	}
 	protected void close() {
 		// This, and other places, would probably be helped by try with resources, which came in after my time try (resource list) { ...
-		try {
-			if ( fileInUse == remoteCSVFile && fileCouldBeChanged ) {		// If working with a downloaded file and program is closing, upload.
-				try {
-					mDbxClient.files().deleteV2(dropboxFileName + ".orig", null);	// Attempt to delete the existing backup before backing up
-				} catch(DbxException ignored) {
-					// Hopefully it just means that the backup wasn't on the remote for some reason
-				}
-				try {
-					mDbxClient.files().moveV2(dropboxFileName, dropboxFileName + ".orig");
-				} catch (DbxException ignored) {
-					// Somehow the original file is no longer on the remote. This is weirder.
-				}
-				InputStream localSourceFile = new FileInputStream(remoteCSVfileName);
-				try {
-					/*FileMetadata metadata = */mDbxClient.files().uploadBuilder(dropboxFileName)
-											.withMode(WriteMode.OVERWRITE)
-											.uploadAndFinish(localSourceFile);
-					try {Thread.sleep(5000); } catch (InterruptedException ignored) {}	// There must be a better way. If I knew the process that is carrying out the upload then I could use waitFor(process)
-					localSourceFile.close();
-					Files.delete(Paths.get(remoteCSVfileName));
-					/*System.out.println(metadata);*/
-				} catch(DbxException ingored) {
-					JOptionPane.showMessageDialog(null, "Upload to remote data source failed", "Failure on remote resource", JOptionPane.INFORMATION_MESSAGE);
-				}
+		System.out.println("DatabaseFile close() called");
+		if ( fileInUse == remoteCSVFile && fileCouldBeChanged ) {		// If program is closing and working with a downloaded and changed file, upload.
+			System.out.println("In the downloaded file has changed block");
+			try {
+				mDbxClient.files().deleteV2(dropboxFileName + ".orig", null);	// Attempt to delete the existing backup before backing up
+			} catch(DbxException ignored) {
+				// Hopefully it just means that the backup wasn't on the remote for some reason
 			}
-		} catch(IOException e) {
-			e.printStackTrace();
+			try {
+				mDbxClient.files().moveV2(dropboxFileName, dropboxFileName + ".orig");
+			} catch (DbxException ignored) {
+				// Somehow the original file is no longer on the remote. This is weirder.
+			}
+			try {
+				InputStream localSourceFile = new FileInputStream(remoteCSVfileName);
+				/*FileMetadata metadata = */mDbxClient.files().uploadBuilder(dropboxFileName)
+										.withMode(WriteMode.OVERWRITE)
+										.uploadAndFinish(localSourceFile);
+				fileInUse  = null;		// This is correct if we've successfully uploaded. The file "in use" is no longer here it's on the remote
+										// In the try block, t's also a sneaky way to signal to the upcoming delete not to delete, as the not uploaded file IS the file in use
+				/*System.out.println(metadata);*/
+				localSourceFile.close();
+			} catch(DbxException ingored) {
+				JOptionPane.showMessageDialog(null, "Upload to remote data source failed", "Failure on remote resource", JOptionPane.INFORMATION_MESSAGE);
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if ( fileInUse == remoteCSVFile ) {		// If program is closing and working with a downloaded file, and as long as the upload succeeded (see the sneaky flag action above) delete the download.
+			System.out.println("In the delete downloaded file block");
+			System.gc();
+			try {Thread.sleep(5000); } catch (InterruptedException ignored) {}	// There must be a better way. If I knew the process then I could use waitFor(process)
+			try {
+				Files.delete(Paths.get(remoteCSVfileName));
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	protected void backup() {
