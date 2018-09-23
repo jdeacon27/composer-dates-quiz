@@ -40,6 +40,9 @@ public class ComposerDatesQuiz extends JFrame {
 	public ComposerDatesQuiz() {
 		super("Composer Dates Quiz");
         
+		composerDatabase = new ComposerDatabase();
+		sessionChooser = new Chooser(composerDatabase);
+		
 		JTabbedPane tabbedPane = new JTabbedPane();
 		JPanel lifetimePanel = new JPanel();
 		lifetimePanel.setLayout(null);
@@ -348,6 +351,21 @@ public class ComposerDatesQuiz extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+    public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				ComposerDatesQuiz quiz = new ComposerDatesQuiz();
+				quiz.setVisible(true);
+				quiz.poseYearQuestion();
+				quiz.p1NextButton.requestFocusInWindow();
+				quiz.p1NextButton.getRootPane().setDefaultButton(quiz.p1NextButton);
+				// This is asymmetric. One panel does these defaults here and the other elsewhere.
+			}
+		});
+	}
+
 	
 // Inner (instance) classes follow. An instance of such a class will be contained within each instance of the containing class. They have access to the outer instance's members.
 
@@ -393,21 +411,6 @@ public class ComposerDatesQuiz extends JFrame {
 	    }
 	}
 
-    public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				ComposerDatesQuiz quiz = new ComposerDatesQuiz();
-				quiz.setVisible(true);
-				quiz.poseYearQuestion();
-				quiz.p1NextButton.requestFocusInWindow();
-				quiz.p1NextButton.getRootPane().setDefaultButton(quiz.p1NextButton);
-				// This is asymmetric. One panel does these defaults here and the other elsewhere.
-			}
-		});
-	}
-
 	protected void poseComposerQuestion() {
 		if ( quizzingKnownComposers ) {
 			currentComposer = sessionChooser.nextShuffledKnownComposer();
@@ -435,8 +438,8 @@ public class ComposerDatesQuiz extends JFrame {
 	    p3knownComposer.setSelected(currentComposer.knownComposer().length() != 0);
 	}
 	
-	private ComposerDatabase composerDatabase = new ComposerDatabase();
-	private Chooser sessionChooser = new Chooser(composerDatabase);
+	private ComposerDatabase composerDatabase;
+	private Chooser sessionChooser;
 	private Composer currentComposer;
 	private boolean quizzingKnownComposers;
 	private boolean quizzingForenames;
