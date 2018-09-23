@@ -31,10 +31,8 @@ public class DatabaseFile {
 			databaseFileExistsLocally = true;
 		}
 		if ( dropboxTokenFile.exists() ) {		// If the token file is there we'll steam in and assume we're to load the database from Dropbox, even if a local file exists
-			try {
-				BufferedReader textReader = new BufferedReader(new FileReader(dropboxTokenfileName));
+			try ( BufferedReader textReader = new BufferedReader(new FileReader(dropboxTokenfileName)) ) { 		// This now uses try with resources; there are probably other places that would probably be helped by them
 				dropboxToken = textReader.readLine();
-				textReader.close();
 
 				DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/composer-quiz").build();		// I don't understand quite what this does
 		        /*DbxClientV2*/ mDbxClient = new DbxClientV2(config, dropboxToken);								// This object effectively IS dropbox
@@ -76,7 +74,6 @@ public class DatabaseFile {
 			return (fileInUse == remoteCSVFile) && fileCouldBeChanged;
 	}
 	protected void close() {
-		// This, and other places, would probably be helped by try with resources, which came in after my time try (resource list) { ...
 		boolean stillNeedsUploading = false;
 		if ( fileInUse == remoteCSVFile && fileCouldBeChanged ) {		// If program is closing and working with a downloaded and changed file, upload.
 			stillNeedsUploading = true;
@@ -90,14 +87,12 @@ public class DatabaseFile {
 			} catch (DbxException ignored) {
 				// Somehow the original file is no longer on the remote. This is weirder.
 			}
-			try {
-				InputStream localSourceFile = new FileInputStream(remoteCSVfileName);
+			try ( InputStream localSourceFile = new FileInputStream(remoteCSVfileName) ){
 				/*FileMetadata metadata = */mDbxClient.files().uploadBuilder(dropboxFileName)
 										.withMode(WriteMode.OVERWRITE)
 										.uploadAndFinish(localSourceFile);
 				stillNeedsUploading = false;
 				/*System.out.println(metadata);*/
-				localSourceFile.close();
 			} catch(DbxException ingored) {
 				stillNeedsUploading = true;
 				JOptionPane.showMessageDialog(null, "Upload to remote data source failed", "Failure on remote resource", JOptionPane.INFORMATION_MESSAGE);
@@ -106,8 +101,8 @@ public class DatabaseFile {
 			}
 		}
 		if ( fileInUse == remoteCSVFile && !stillNeedsUploading) {		// If program is closing and working with a downloaded file, and as long as any upload succeeded (see the sneaky flag action above) delete the download.
-			System.gc();
-			try {Thread.sleep(5000); } catch (InterruptedException ignored) {}	// There must be a better way. If I knew the process (or could be arsed to start it myself) then I could use waitFor(process)
+			System.gc();	// Allegedly gc finishes before returning from this call, so I've commented out the following delay; however there has been one (albeit peculiar) file in use without the delay 
+			try {Thread.sleep(500); } catch (InterruptedException ignored) {}	// There must be a better way. If I knew the process (or could be arsed to start it myself) then I could use waitFor(process)
 			try {
 				Files.delete(Paths.get(remoteCSVfileName));
 			} catch(IOException e) {
