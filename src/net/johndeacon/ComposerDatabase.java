@@ -22,8 +22,7 @@ public class ComposerDatabase {
 	 */
 	protected ComposerDatabase() {
 		dataFile = DataFile.dataFileBuilder();
-		CSVReader reader = dataFile.getCSVReader();
-		try {
+		try ( CSVReader reader = dataFile.getCSVReader() ){
 			String[] nextRecord;
 			while ( (nextRecord = reader.readNext()) != null ) {
 				int birthYear, deathYear;
@@ -59,9 +58,8 @@ public class ComposerDatabase {
 				//   only by (random) position, so now we'll build an ArrayList from the entries.
 				knownYearsIndexed = new ArrayList<Yearful>(knownYears.values());
 			}
-			reader.close();
 		} catch(IOException e) {
-			e.printStackTrace();;
+			e.printStackTrace();
 		}
 		diskFileOutOfSync = false;
 	}
@@ -128,10 +126,9 @@ public class ComposerDatabase {
 		dataFile.close();
 	}
 	protected boolean writeToCSVFile() {
-        try {
+        try ( CSVWriter writer = dataFile.getCSVWriter() ){
         	dataFile.backup();
-    		CSVWriter writer = dataFile.getCSVWriter();
-        	String[] headerLine = {"Family Name First", "Forename First", "Birth Date", "Death Date", "Age", "Memorized"};
+    		String[] headerLine = {"Family Name First", "Forename First", "Birth Date", "Death Date", "Age", "Memorized"};
         	writer.writeNext(headerLine);
         	for (Composer nextComposer : allComposers) {
         		writer.writeNext(new String[] { nextComposer.familyNameFirstFullName(),
@@ -141,7 +138,6 @@ public class ComposerDatabase {
         				nextComposer.age(),
         				nextComposer.knownComposer() });
         	}
-        	writer.close();
         } catch(IOException e) {
         	e.printStackTrace();
         }
