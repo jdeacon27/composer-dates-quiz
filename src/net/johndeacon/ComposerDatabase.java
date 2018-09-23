@@ -5,6 +5,7 @@ import java.text.Normalizer;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -20,8 +21,8 @@ public class ComposerDatabase {
 	 * The database can also be asked for lists of birth and death events by year (CE).
 	 */
 	protected ComposerDatabase() {
-		databaseFile = new DatabaseFile();
-		CSVReader reader = databaseFile.getCSVReader();
+		dataFile = DataFile.dataFileBuilder();
+		CSVReader reader = dataFile.getCSVReader();
 		try {
 			String[] nextRecord;
 			while ( (nextRecord = reader.readNext()) != null ) {
@@ -122,24 +123,14 @@ public class ComposerDatabase {
 	protected boolean unsavedFileChanges () {
 		return diskFileOutOfSync;
 	}
-	@Deprecated protected boolean safeToClose() {
-		if ( diskFileOutOfSync ) {
-			return false;
-		} else {
-			if ( !databaseFile.safeToExit() ) {
-				
-			}
-			return true;
-		}
-	}
 	protected void close() {
 		// At the moment there's nothing to do at termination except ask the file if it needs to do anything (like upload to the cloud if it's not a local file). 
-		databaseFile.close();
+		dataFile.close();
 	}
 	protected boolean writeToCSVFile() {
         try {
-        	databaseFile.backup();
-    		CSVWriter writer = databaseFile.getCSVWriter();
+        	dataFile.backup();
+    		CSVWriter writer = dataFile.getCSVWriter();
         	String[] headerLine = {"Family Name First", "Forename First", "Birth Date", "Death Date", "Age", "Memorized"};
         	writer.writeNext(headerLine);
         	for (Composer nextComposer : allComposers) {
@@ -158,7 +149,7 @@ public class ComposerDatabase {
 		return true;
 	}
 	
-	private DatabaseFile databaseFile;
+	private DataFile dataFile;
 	private List<Composer> allComposers = new ArrayList<>();
 	private List<Integer> knownComposerIndices = new ArrayList<>();
 	private Map<String,Composer> composers = new HashMap<>();
