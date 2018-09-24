@@ -40,6 +40,9 @@ public class ComposerDatesQuiz extends JFrame {
 	public ComposerDatesQuiz() {
 		super("Composer Dates Quiz");
         
+		composerDatabase = new ComposerDatabase();
+		sessionChooser = new Chooser(composerDatabase);
+		
 		JTabbedPane tabbedPane = new JTabbedPane();
 		JPanel lifetimePanel = new JPanel();
 		lifetimePanel.setLayout(null);
@@ -264,7 +267,7 @@ public class ComposerDatesQuiz extends JFrame {
 		editPanel.add(fieldLabel02);
 
 		/*JTextField*/ p3composerNameField.setBounds(50, 150, 290, 30);
-		p3composerNameField.setToolTipText("The name of the composer you found. You can edit the name.");
+		p3composerNameField.setToolTipText("<html>The name of the composer you found. You can edit the name.<br>But don't forget to press enter after editing!</html>");
 //		p3composerNameField.setOpaque(true);
 //		p3composerNameField.setBackground(Color.WHITE);
 		p3composerNameField.addActionListener(new ActionListener() {
@@ -331,21 +334,36 @@ public class ComposerDatesQuiz extends JFrame {
 // Finish off the JFrame
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent) {
-				if ( !composerDatabase.safeToClose() ) {
-					if ( JOptionPane.showConfirmDialog(null, "There appear to have been composer edits. Are you sure you want to close without writing to disk?", "Close Window?", 
+				if ( composerDatabase.unsavedFileChanges() ) {		// Changes have been made to the in-memory database
+					if ( JOptionPane.showConfirmDialog(null, "There appear to have been composer edits. Are you sure you want to close without writing to disk? Press Yes to exit without saving.", "Close Window?", 
 							JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-						System.exit(0);
-					} else {
+							JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {	// If the user selects NO, that means they want to save changes since the last write
 						composerDatabase.writeToCSVFile();
 					}
 				}
+				composerDatabase.close();		// In all cases, give the database it's opportunity to do anything else before terminating
+				System.exit(0);
 			}
 		});
 	    this.setSize(400,500);		// width, height
 		lifetimePanel.getRootPane().setDefaultButton(p1SubmitButton);
         this.setLocationByPlatform(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+    public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				ComposerDatesQuiz quiz = new ComposerDatesQuiz();
+				quiz.setVisible(true);
+				quiz.poseYearQuestion();
+				quiz.p1NextButton.requestFocusInWindow();
+				quiz.p1NextButton.getRootPane().setDefaultButton(quiz.p1NextButton);
+				// This is asymmetric. One panel does these defaults here and the other elsewhere.
+			}
+		});
 	}
 
 	
@@ -393,21 +411,6 @@ public class ComposerDatesQuiz extends JFrame {
 	    }
 	}
 
-    public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				ComposerDatesQuiz quiz = new ComposerDatesQuiz();
-				quiz.setVisible(true);
-				quiz.poseYearQuestion();
-				quiz.p1NextButton.requestFocusInWindow();
-				quiz.p1NextButton.getRootPane().setDefaultButton(quiz.p1NextButton);
-				// This is asymmetric. One panel does these defaults here and the other elsewhere.
-			}
-		});
-	}
-
 	protected void poseComposerQuestion() {
 		if ( quizzingKnownComposers ) {
 			currentComposer = sessionChooser.nextShuffledKnownComposer();
@@ -435,8 +438,8 @@ public class ComposerDatesQuiz extends JFrame {
 	    p3knownComposer.setSelected(currentComposer.knownComposer().length() != 0);
 	}
 	
-	private ComposerDatabase composerDatabase = new ComposerDatabase();
-	private Chooser sessionChooser = new Chooser(composerDatabase);
+	private ComposerDatabase composerDatabase;
+	private Chooser sessionChooser;
 	private Composer currentComposer;
 	private boolean quizzingKnownComposers;
 	private boolean quizzingForenames;

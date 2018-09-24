@@ -1,21 +1,16 @@
 package net.johndeacon;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.text.Normalizer;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
 
 public class ComposerDatabase {
@@ -26,9 +21,9 @@ public class ComposerDatabase {
 	 * The database can also be asked for lists of birth and death events by year (CE).
 	 */
 	protected ComposerDatabase() {
-		try {
+		dataFile = DataFile.dataFileBuilder();
+		try ( CSVReader reader = dataFile.getCSVReader() ){
 			String[] nextRecord;
-			CSVReader reader = new CSVReaderBuilder(new InputStreamReader( new FileInputStream("composers.csv"),"UTF-8") ).withSkipLines(1).build();
 			while ( (nextRecord = reader.readNext()) != null ) {
 				int birthYear, deathYear;
 				Composer nextComposer;
@@ -63,10 +58,10 @@ public class ComposerDatabase {
 				//   only by (random) position, so now we'll build an ArrayList from the entries.
 				knownYearsIndexed = new ArrayList<Yearful>(knownYears.values());
 			}
-			reader.close();
 		} catch(IOException e) {
-			System.out.println("File not found");
+			e.printStackTrace();
 		}
+		diskFileOutOfSync = false;
 	}
 	
 	protected int totalComposerEntries() { return allComposers.size(); }
@@ -123,14 +118,17 @@ public class ComposerDatabase {
 		}
 		// I'm not quite sure how this (checkbox at the moment) could get set to what it already is, but those two conditions between them ignore such an event
 	}
-	protected boolean safeToClose() {
-		return !diskFileOutOfSync;
+	protected boolean unsavedFileChanges () {
+		return diskFileOutOfSync;
+	}
+	protected void close() {
+		// At the moment there's nothing to do at termination except ask the file if it needs to do anything (like upload to the cloud if it's not a local file). 
+		dataFile.close();
 	}
 	protected boolean writeToCSVFile() {
-        try {
-        	Files.move(Paths.get("./composers.csv"), Paths.get("./composers.orig.csv"), REPLACE_EXISTING);
-        	CSVWriter writer = new CSVWriter(Files.newBufferedWriter(Paths.get("./composers.csv")));
-        	String[] headerLine = {"Family Name First", "Forename First", "Birth Date", "Death Date", "Age", "Memorized"};
+        try ( CSVWriter writer = dataFile.getCSVWriter() ){
+        	dataFile.backup();
+    		String[] headerLine = {"Family Name First", "Forename First", "Birth Date", "Death Date", "Age", "Memorized"};
         	writer.writeNext(headerLine);
         	for (Composer nextComposer : allComposers) {
         		writer.writeNext(new String[] { nextComposer.familyNameFirstFullName(),
@@ -140,7 +138,6 @@ public class ComposerDatabase {
         				nextComposer.age(),
         				nextComposer.knownComposer() });
         	}
-        	writer.close();
         } catch(IOException e) {
         	e.printStackTrace();
         }
@@ -148,12 +145,13 @@ public class ComposerDatabase {
 		return true;
 	}
 	
+	private DataFile dataFile;
 	private List<Composer> allComposers = new ArrayList<>();
 	private List<Integer> knownComposerIndices = new ArrayList<>();
 	private Map<String,Composer> composers = new HashMap<>();
 	private Map<Integer,Yearful> knownYears = new LinkedHashMap<>();		// Yearfuls "indexed" by CE year, e.g. 1756
 	private List<Yearful> knownYearsIndexed;								// Yearfuls indexed by index number: 0, 1, 2, ...
-	private boolean diskFileOutOfSync;
+	private boolean diskFileOutOfSync = false;
 	// Current layout of CSV file follows
 	private int familyNameFirstField = 0;
 	private int foreNameFirstField = 1;
