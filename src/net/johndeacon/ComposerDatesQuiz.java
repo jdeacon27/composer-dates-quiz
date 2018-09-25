@@ -102,7 +102,7 @@ public class ComposerDatesQuiz extends JFrame {
 	    lifetimePanel.add(p1SubmitButton);
 		
 		/*JButton*/ p1NextButton.setText("Next");
-	    p1NextButton.setBounds(50, 290, 100, 40);
+	    p1NextButton.setBounds(50, 265, 100, 40);
 		p1NextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				p1birthAnswerField.setText("");
@@ -116,9 +116,9 @@ public class ComposerDatesQuiz extends JFrame {
 		lifetimePanel.add(p1NextButton);
 		
 		/*JRadioButton*/ knownComposers.setText("Known Composers"); 
-		knownComposers.setBounds(170, 280, 140, 30);
+		knownComposers.setBounds(170, 255, 140, 30);
 		/*JRadioButton*/ allComposers.setText("All Composers"); 
-		allComposers.setBounds(170, 310, 140, 30);
+		allComposers.setBounds(170, 285, 140, 30);
 		ButtonGroup akGroup = new ButtonGroup();
 		akGroup.add(allComposers);
 		akGroup.add(knownComposers);
@@ -130,7 +130,7 @@ public class ComposerDatesQuiz extends JFrame {
 		lifetimePanel.add(allComposers);
 		
 		JCheckBox forenames = new JCheckBox("Quiz forenames?");
-		forenames.setBounds(50, 360, 130, 30);
+		forenames.setBounds(50, 325, 130, 30);
 		forenames.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if ( e.getStateChange() == ItemEvent.SELECTED ) {
@@ -317,12 +317,12 @@ public class ComposerDatesQuiz extends JFrame {
 		});
 		editPanel.add(p3knownComposer);
 
-		/*JLabel*/ p3familyNameFirstField.setBounds(50, 320, 390, 30);
+		/*JLabel*/ p3familyNameFirstField.setBounds(50, 310, 390, 30);
 		p3familyNameFirstField.setToolTipText("The full name according to the original source database.");
 		editPanel.add(p3familyNameFirstField);
 
 	    JButton p3WriteButton = new JButton("Write");  
-	    p3WriteButton.setBounds(50, 370, 100, 40);
+	    p3WriteButton.setBounds(50, 350, 100, 40);
 	    p3WriteButton.setToolTipText("<html>Write internal database out to the disk file.<br>The existing file will be renamed .orig.csv and any existing .orig.csv file will be replaced.</html>");
 	    p3WriteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

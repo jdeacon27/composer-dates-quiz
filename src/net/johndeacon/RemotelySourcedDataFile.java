@@ -25,7 +25,7 @@ import com.opencsv.CSVWriter;
 
 class RemotelySourcedDataFile extends DataFile {
 	protected  RemotelySourcedDataFile () {
-		if ( !dropboxTokenFile.exists() ) {
+		if ( !DataFile.dropboxTokenFile().exists() ) {
 			JOptionPane.showMessageDialog(null, "Remote data file object constructor called, but remote access token file doesn't exist.", "Fatal Error", JOptionPane.INFORMATION_MESSAGE);
 			System.exit(1);
 		}
@@ -107,6 +107,5 @@ class RemotelySourcedDataFile extends DataFile {
 	private String dropboxToken;
 	private String dropboxFileName = "/composers.dropbox.csv";
 	private String encoding = "UTF-8";
-	private File dropboxTokenFile = new File(dropboxTokenfileName);
 	boolean databaseFileDownloaded = false;
 }
