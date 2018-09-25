@@ -1,7 +1,6 @@
 package net.johndeacon;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -29,12 +28,16 @@ class RemotelySourcedDataFile extends DataFile {
 			JOptionPane.showMessageDialog(null, "Remote data file object constructor called, but remote access token file doesn't exist.", "Fatal Error", JOptionPane.INFORMATION_MESSAGE);
 			System.exit(1);
 		}
+		if ( DataFile.csvFile().exists() ) {
+			JOptionPane.showMessageDialog(null, "Remote resource already downloaded. Perhaps another instance of the program is running. Or perhaps a previous upload failed.", "Fatal Error", JOptionPane.INFORMATION_MESSAGE);
+			System.exit(1);
+		}
 		try ( BufferedReader textReader = new BufferedReader(new FileReader(dropboxTokenfileName)) ) { 		// This now uses try with resources; there are probably other places that would probably be helped by them
 			dropboxToken = textReader.readLine();
 
 			DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/composer-quiz").build();		// I don't understand quite what this does
-	        /*DbxClientV2*/ mDbxClient = new DbxClientV2(config, dropboxToken);								// This object effectively IS dropbox
-	        OutputStream outputStream = new FileOutputStream(DataFile.csvFile());								// What we're going to call the dropbox file when it's been downloaded
+			/*DbxClientV2*/ mDbxClient = new DbxClientV2(config, dropboxToken);							// This object effectively IS dropbox
+	        OutputStream outputStream = new FileOutputStream(DataFile.csvFile());						// What we're going to call the dropbox file when it's been downloaded
 	        mDbxClient.files().download(dropboxFileName).download(outputStream);
 			databaseFileDownloaded = true;
 	        // Could check that the file exists on Dropbox. At the moment it's non-existence is sufficiently unlikely that the exception stack trace is indication enough

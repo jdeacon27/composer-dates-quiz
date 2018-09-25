@@ -1,5 +1,6 @@
 package net.johndeacon;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,10 +17,20 @@ import com.opencsv.CSVWriter;
 
 class LocallySourcedDataFile extends DataFile {
 	protected LocallySourcedDataFile () {
-		if ( !(DataFile.csvFile().exists() && DataFile.csvFile().isFile()) ) {
+		if ( ! ( DataFile.csvFile().exists() && DataFile.csvFile().isFile() ) ) {
 			JOptionPane.showMessageDialog(null, "Local data file object constructor called, but local data file " + DataFile.csvFileName() + " doesn't exist.", "Fatal Error", JOptionPane.INFORMATION_MESSAGE);
 			System.exit(1);
-		} // could have an else to create a one-line CSV locally in the face of double failure
+		} else if ( lockFile.exists() ){
+			JOptionPane.showMessageDialog(null, "Lock file found. Close other instances of quiz program or delete the .lck file.", "Fatal Error", JOptionPane.INFORMATION_MESSAGE);
+			System.exit(1);
+		} else {
+			try {
+				lockFile.createNewFile();
+			} catch(IOException e) {
+				JOptionPane.showMessageDialog(null, "Unable to create lock file for some unknown reason.", "Fatal Error", JOptionPane.INFORMATION_MESSAGE);
+				System.exit(1);
+			}
+		}
 	}
 	public CSVReader getCSVReader() {
 		try {
@@ -47,9 +58,10 @@ class LocallySourcedDataFile extends DataFile {
     	return;
 	}
 	public void close() {
-		// nothing to do?
+		lockFile.delete();
 	}
 
 	private String encoding = "UTF-8";
+	private File lockFile = new File("composer_quiz_lock.lck");
 	boolean databaseFileExistsLocally = false;		// Probably redundant
 }

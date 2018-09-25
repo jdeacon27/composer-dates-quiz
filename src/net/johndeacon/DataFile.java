@@ -20,13 +20,13 @@ abstract class DataFile {		// Factory for its subclasses
 			dataFile = new RemotelySourcedDataFile();
 		} else if ( localCsvFile.exists() ) {
 			csvFileName = localCsvFileName;
+			csvFile = new File(csvFileName);
 			dataFile =new LocallySourcedDataFile();
 		} else {
 			JOptionPane.showMessageDialog(null, "Neither local data file nor remote access token file exist.", "Fatal Error", JOptionPane.INFORMATION_MESSAGE);
 			dataFile = null;
 			System.exit(1);
 		}
-		csvFile = new File(csvFileName);
 		return dataFile;
 	}
 	static String csvFileName() { return csvFileName; }
