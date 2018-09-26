@@ -40,8 +40,8 @@ public class ComposerDatesQuiz extends JFrame {
 	public ComposerDatesQuiz() {
 		super("Composer Dates Quiz");
         
-//		composerDatabase = new ComposerDatabase(p1Status);		// Move this to after the status field is visible
-//		sessionChooser = new Chooser(composerDatabase);
+		composerDatabase = new ComposerDatabase(p1Status);		// Move this to after the status field is visible
+		sessionChooser = new Chooser(composerDatabase);
 		
 		JTabbedPane tabbedPane = new JTabbedPane();
 		JPanel lifetimePanel = new JPanel();
@@ -69,9 +69,6 @@ public class ComposerDatesQuiz extends JFrame {
 		composerNamePrompt.setBackground(Color.WHITE);
 		lifetimePanel.add(composerNamePrompt);
 		
-		composerDatabase = new ComposerDatabase(p1Status);
-		sessionChooser = new Chooser(composerDatabase);
-	    
 	    /*JTextField*/ p1birthAnswerField.setBounds(50, 90, 80, 30);
 	    lifetimePanel.add(p1birthAnswerField);
 
@@ -365,7 +362,7 @@ public class ComposerDatesQuiz extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		numbersInfo.setText("(Quizzing from " + composerDatabase.totalKnownComposerEntries() + " composers)");
 		p1Status.setText("[Working from " + composerDatabase.mode() + "]");
-		p3Status.setText("Testing testing");
+		p3Status.setText("[Working from " + composerDatabase.mode() + "]");
 	}
 
     public static void main(String[] args) {
