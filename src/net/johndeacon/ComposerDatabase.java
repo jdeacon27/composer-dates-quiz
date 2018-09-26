@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.swing.JLabel;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -20,10 +22,11 @@ public class ComposerDatabase {
 	 * those that were marked as known (or memorized).
 	 * The database can also be asked for lists of birth and death events by year (CE).
 	 */
-	protected ComposerDatabase() {
+	protected ComposerDatabase(JLabel statusField) {
 		dataFile = DataFile.dataFileBuilder();
 		try ( CSVReader reader = dataFile.getCSVReader() ){
 			String[] nextRecord;
+//			statusField.setText("Reading composer records");
 			while ( (nextRecord = reader.readNext()) != null ) {
 				int birthYear, deathYear;
 				Composer nextComposer;
@@ -120,6 +123,9 @@ public class ComposerDatabase {
 	}
 	protected boolean unsavedFileChanges () {
 		return diskFileOutOfSync;
+	}
+	protected String mode() {
+		return dataFile.dataFileMode();
 	}
 	protected void close() {
 		// At the moment there's nothing to do at termination except ask the file if it needs to do anything (like upload to the cloud if it's not a local file). 

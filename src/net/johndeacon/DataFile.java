@@ -14,13 +14,15 @@ abstract class DataFile {		// Factory for its subclasses
 	abstract void backup();
 	static DataFile dataFileBuilder() {
 		DataFile dataFile;
-		if ( dropboxTokenFile.exists() ) {
-			csvFileName = downloadedCsvFileName;
-			csvFile = new File(csvFileName);
+		if ( _dropboxTokenFile.exists() ) {
+			_dataFileMode = "downloaded file";
+			_csvFileName = _downloadedCsvFileName;
+			_csvFile = new File(_csvFileName);
 			dataFile = new RemotelySourcedDataFile();
-		} else if ( localCsvFile.exists() ) {
-			csvFileName = localCsvFileName;
-			csvFile = new File(csvFileName);
+		} else if ( _localCsvFile.exists() ) {
+			_dataFileMode = "local file";
+			_csvFileName = _localCsvFileName;
+			_csvFile = new File(_csvFileName);
 			dataFile =new LocallySourcedDataFile();
 		} else {
 			JOptionPane.showMessageDialog(null, "Neither local data file nor remote access token file exist.", "Fatal Error", JOptionPane.INFORMATION_MESSAGE);
@@ -29,16 +31,18 @@ abstract class DataFile {		// Factory for its subclasses
 		}
 		return dataFile;
 	}
-	static String csvFileName() { return csvFileName; }
-	static File csvFile() { return csvFile; }
-	static File dropboxTokenFile() { return dropboxTokenFile; }
+	String dataFileMode() { return _dataFileMode; }
+	static String csvFileName() { return _csvFileName; }
+	static File csvFile() { return _csvFile; }
+	static File dropboxTokenFile() { return _dropboxTokenFile; }
 	
-	static private String localCsvFileName = "composers.csv";
-	static private String downloadedCsvFileName = "composers.dropbox.csv";
-	static private File localCsvFile = new File(localCsvFileName);
-	static private String csvFileName;
-	static private File csvFile;
-	static private String dropboxTokenfileName = "dropboxToken.txt";
-	static private File dropboxTokenFile = new File(dropboxTokenfileName);
+	static private String _dataFileMode;
+	static private String _localCsvFileName = "composers.csv";
+	static private String _downloadedCsvFileName = "composers.dropbox.csv";
+	static private File _localCsvFile = new File(_localCsvFileName);
+	static private String _csvFileName;
+	static private File _csvFile;
+	static private String _dropboxTokenfileName = "dropboxToken.txt";
+	static private File _dropboxTokenFile = new File(_dropboxTokenfileName);
 
 }
